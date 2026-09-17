@@ -1,0 +1,10 @@
+{
+  "syncedFrom": "/home/mau/Projects/birramon/src/data",
+  "at": "2026-09-17T13:01:55.285Z",
+  "files": [
+    "types.ts",
+    "styles.ts",
+    "descriptors.ts",
+    "beers.ts"
+  ]
+}
