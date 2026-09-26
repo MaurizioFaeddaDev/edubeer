@@ -150,6 +150,19 @@ mostrato resta `27`.
 
 ---
 
+## Deploy
+
+Su Vercel, progetto dedicato, dominio di produzione <https://edubeer.com>. Il progetto
+nasce da quello che ospitava Hopalyzer: il source è stato ripuntato su questo repo e il
+preset è tornato **Vite**. Questo è il motivo per cui `vercel.json` esiste ed è esplicito —
+`framework: "vite"`, `outputDirectory: "dist"` — invece di affidarsi all'auto-detection,
+che sul progetto ereditava il preset Next.js.
+
+Il routing è su **hash** (`#/birre`, `#/confronta`), quindi il sito è un singolo
+`index.html` con asset: **nessun rewrite SPA** è necessario né configurato.
+
+---
+
 ## Stato e prossimi passi
 
 **Fatto:** guida ai 116 stili in 34 categorie come homepage, con ricerca in navbar
