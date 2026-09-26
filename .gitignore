@@ -2,3 +2,5 @@ node_modules
 dist
 *.local
 .tmp
+*.tsbuildinfo
+__pycache__/

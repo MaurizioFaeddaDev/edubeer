@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // ─────────────────────────────────────────────────────────────────────────────
 // Sincronizza il corpus delle birre dal repository di gioco (BIRRAMON) a
-// BirraDex. La fonte di verità resta una sola: birramon/src/data/.
+// EduBeer. La fonte di verità resta una sola: birramon/src/data/.
 //
 //   node scripts/sync-data.mjs [percorso-al-repo-di-gioco]
 //
-// I quattro file copiati sono autosufficienti (importano solo da ./types),
+// I tre file copiati sono autosufficienti (importano solo da ./types),
 // quindi si possono travasare senza altre modifiche.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ const source = resolve(
   'src/data',
 );
 
-const FILES = ['types.ts', 'styles.ts', 'descriptors.ts', 'beers.ts'];
+const FILES = ['types.ts', 'styles.ts', 'beers.ts'];
 
 if (!existsSync(source)) {
   console.error(`✗ Sorgente non trovata: ${source}`);

@@ -1,9 +1,9 @@
 {
-  "name": "birradex",
+  "name": "edubeer",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "BirraDex — enciclopedia consultabile delle birre: profilo sensoriale su nove assi, storia, abbinamenti, confronto.",
+  "description": "EduBeer — enciclopedia consultabile delle birre: 613 birre citate dal BJCP 2021, 116 stili, 30 approfondimenti con storia e abbinamento.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b --noEmit && vite build",

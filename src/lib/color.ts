@@ -49,18 +49,3 @@ export function darken(hex: string, amount = 0.3): string {
   const [r, g, b] = hexToRgb(hex);
   return `#${toHex(r * (1 - amount))}${toHex(g * (1 - amount))}${toHex(b * (1 - amount))}`;
 }
-
-/** Etichetta verbale dell'intensità su un asse: più leggibile di un numero. */
-export const INTENSITY_WORD = ['assente', 'labile', 'presente', 'chiaro', 'netto', 'dominante'] as const;
-
-export const intensityWord = (v: number) => INTENSITY_WORD[Math.max(0, Math.min(5, Math.round(v)))];
-
-/** Il colore di una cella di profilo, coerente fra griglia, tabella e radar. */
-export function axisColor(v: number): string {
-  if (v <= 0) return '#1c2417';
-  return ['', '#3f4d24', '#4f7a28', '#8bac0f', '#d9a441', '#b8703a'][v] ?? '#1c2417';
-}
-
-export function axisTextColor(v: number): string {
-  return v >= 4 ? '#141a10' : '#e8f0d0';
-}

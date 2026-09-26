@@ -1,94 +1,95 @@
-# BirraDex
+# EduBeer
 
-Enciclopedia consultabile delle birre. Trenta schede complete — storia, origine, ABV/IBU/SRM,
-abbinamento gastronomico, nota da esperto — e soprattutto un **profilo sensoriale su nove assi**
-che si può cercare, filtrare, ordinare e confrontare.
+Enciclopedia consultabile delle birre. Il catalogo segue il **documento ufficiale BJCP
+2021**: **116 stili** (107 numerati + 9 storici della categoria 27) in 34 categorie, e le
+**613 birre commerciali** che il BJCP cita come esempi di quegli stili. Il **focus è sugli
+stili** — la guida ai 116 stili è l'homepage e ha filtri propri — mentre le birre
+citate stanno in un catalogo a parte. In più, una sezione **Confronta** che mette fianco a
+fianco da 2 a 5 stili su tutti i numeri dichiarati (ABV, IBU, colore, OG, FG), e una sezione
+separata di **Approfondimenti** con 30 birre che hanno una scheda scritta a mano — storia,
+origine, abbinamento gastronomico, nota da esperto.
 
-È il fratello da consultazione di **BIRRAMON — Rosso Malto**: stesso corpus di dati, nessun gioco.
-Nel gioco le schede si sbloccano catturando le birre; qui è tutto aperto, sempre, perché
-un'enciclopedia che nasconde le voci è un gioco e non un'enciclopedia.
+La **ricerca sta in navbar** e vale per tutta l'app: mentre scrivi filtra la lista che hai
+davanti (birre o stili) e apre un elenco di scorciatoie raggruppate da cui saltare a una
+scheda; Invio cerca la parola nel catalogo delle birre.
+
+Niente assi sensoriali, niente punteggi, niente sblocchi: qui si consulta.
 
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # bundle statico in dist/ — 105 KB gzip, nessuna dipendenza runtime
+npm run build    # bundle statico in dist/ — nessuna dipendenza runtime oltre a React
 ```
 
 ---
 
-## Cosa sa fare che una lista di birre non sa fare
+## Le sezioni
 
-### 1. Filtrare per profilo sensoriale
+### 1. Stili
 
-La ricerca non è solo testuale. Ogni birra è misurata da 0 a 5 su nove assi:
+I 116 stili BJCP 2021, raggruppati per categoria ufficiale, con i dati vitali (ABV, IBU, OG,
+FG, SRM) e una rilettura italiana. Si filtrano per famiglia
+(Lager / Ale / Trappista / Fermentazione spontanea / Speciale), categoria e intervallo di
+gradazione, amarezza o colore, con gli stessi ordinamenti del catalogo; con un ordinamento
+diverso da «Codice BJCP» la guida passa a un'unica griglia, così il criterio resta visibile.
+Da ogni stile si arriva alle birre che il BJCP cita per esso e agli approfondimenti collegati.
 
-`Maltosità · Luppolo · Tostatura · Lievito · Acidità · Affumicato · Dolcezza · Amaro · Corpo`
+### 2. Confronta
 
-Puoi imporre un minimo e un massimo su ciascun asse, e il risultato è una risposta a una domanda
-che nessun motore di ricerca normale sa risolvere: *«mostrami le birre tostate che non sono amare»*.
+Da 2 a 5 stili messi fianco a fianco. Un radar a cinque assi (ABV, IBU, SRM, OG, FG)
+dà la forma complessiva, tre grafici a barre orizzontali mostrano l'intervallo
+[min–max] di ABV, IBU e colore (con la tinta SRM reale), e una tabella riporta i
+numeri esatti. Gli stili si aggiungono dalle card della sezione Stili con «＋ Confronta»;
+la selezione vive in `localStorage` e sopravvive alla navigazione.
 
-### 2. Ricerche pronte, progettate sui dati reali
+### 3. Birre
 
-Le dieci ricerche pronte non sono decorazione: sono state scelte **dopo aver misurato la
-distribuzione effettiva del corpus**. Per esempio:
+Tutte le birre citate dal BJCP 2021. La ricerca testuale è in navbar; qui restano i filtri
+per categoria, famiglia, stile e intervallo di gradazione, amarezza o colore.
 
-| Ricerca | Asse | Risultato |
-|---|---|---|
-| Scuro ma poco amaro | `tostatura ≥ 2`, `amaro ≤ 2` | 5 birre |
-| Luppolato ma non amaro | `luppolo ≥ 4`, `amaro ≤ 2` | 1 birra |
-| Leggero ma amaro | `corpo ≤ 2`, `amaro ≥ 4` | 3 birre |
-| Tostato e dolce | `tostatura ≥ 3`, `dolcezza ≥ 3` | 2 birre |
-| Affumicato | `affumicato ≥ 3` | 1 birra |
+Il punto delicato: **il BJCP non descrive le singole birre**. Di «Pilsner Urquell» il BJCP
+dice solo che è un esempio dello stile *3B Czech Premium Pale Lager*. Non ne dichiara ABV,
+IBU, né profilo. Quindi ogni scheda mostra i numeri e i testi **dello stile**, e lo dichiara
+in chiaro: nessun dato per-birra viene inventato. Un filtro «ABV ≥ 8%» mostra le birre il cui
+stile *tocca* quella gradazione, non le birre che hanno davvero 8 gradi.
 
-La prima bozza di queste ricerche conteneva «Tostato ma poco amaro» con `tostatura ≥ 4`,
-che sul corpus dà **zero risultati**. Il dato ha corretto il progetto: nel mondo reale la
-tostatura porta con sé l'amaro, quindi la ricerca interessante non è «tostato e non amaro»,
-è «scuro e non amaro» — che è un fatto vero e smonta lo stereotipo meglio di un'affermazione.
+### 4. Approfondimenti
 
-### 3. Dire da dove allargare quando non c'è niente
-
-Quando una ricerca non dà risultati, il tool non si limita a dirlo: per ogni vincolo attivo
-calcola quanti risultati otterresti togliendolo, e te li offre in ordine. È il modo onesto di
-gestire il vuoto — e in un archivio di trenta voci su nove dimensioni il vuoto è la norma,
-non l'eccezione.
-
-### 4. Tabella degli assi
-
-Vista da power user: trenta righe, i nove assi in colonna, ogni cella colorata per intensità.
-È il modo più rapido per vedere che «scuro» e «amaro» non sono la stessa cosa — Pilsner Urquell
-ha `amaro 4` e `tostatura 0`, Irish Stout ha `tostatura 5` e `amaro 3`.
-
-### 5. Confronto
-
-Da due a sei birre: profili sovrapposti sul radar, matrice di somiglianza a coppie, e una
-tabella che mette tutti i valori in colonna con il massimo di ogni riga evidenziato.
-
-La somiglianza è una distanza euclidea sui nove assi corretta dalla differenza di gradazione.
-Serve a rispondere alla domanda vera: *«questa mi piace, cos'altro assomiglia?»*.
-
-### 6. I nove assi, spiegati dove si sbaglia
-
-La sezione più utile del sito. Per ogni asse: la distribuzione sull'archivio, **dove si
-sbaglia**, come si riconosce, come si allena, e le birre che lo incaricano meglio. Non «cosa
-è l'amaro» ma «perché stimare l'amaro dagli IBU è un errore» — che è un'altra cosa.
+Le uniche 30 birre con dati verificati **birra per birra**: storia reale e datata, origine,
+abbinamento gastronomico, nota da esperto. Sono il corpus che EduBeer condivide con il gioco
+BIRRAMON — Rosso Malto, tenuto qui in una sezione separata proprio perché risponde a un'altra
+domanda: non «che stile è?» ma «cosa devo sapere su questa bottiglia?».
 
 ---
 
-## Il contenuto
+## Da dove vengono i dati
 
-Le schede coprono Boemia e Baviera (Plzeň 1842, Hefeweizen, Märzen, Rauchbier, Salvator),
-il Belgio (Witbier, Saison Dupont, lambic e gueuze, la scala trappista, Duvel), le isole
-britanniche (Bitter, London Porter, Irish Stout, Burton IPA, Barley Wine, Wee Heavy),
-l'America (Sierra Nevada Pale Ale, IPA, NEIPA, Double IPA, Imperial Stout, Amber Ale),
-l'Italia (Tipopils, Re Ale) e i Paesi Bassi (La Trappe Quadrupel).
+**Stili e birre BJCP** (`src/data/bjcp.ts`, `src/data/bjcp-beers.ts`) sono generati dal
+**documento ufficiale** `2021_Guidelines_Beer_1.25.docx`:
 
-Dove la vulgata è falsa, la scheda lo dice — e il BirraDex ha una sezione dedicata a
-smontarla:
+```bash
+python3 scripts/gen-bjcp-docx.py [percorso.docx]
+```
 
-- **«Scuro = amaro»** → la ricerca pronta mostra cinque controesempi.
-- **«Le birre scozzesi sono torbate»** → il Wee Heavy ha `affumicato 2` e la scheda spiega che l'affumicato scozzese era leggero e accidentale, non cercato.
-- **«La Guinness è pesante»** → 4,2% ABV, corpo medio-snello, un filo acido di finale.
-- **«Bitter = molto amara»** → una Ordinary Bitter sta intorno ai 25 IBU, meno di una pilsner.
+Perché il `.docx` e non un JSON di terze parti: il primo dataset usato
+(`hopalyzer/bjcp-2021.json`) si è rivelato **incompleto** — mancavano la categoria 27
+(9 stili storici) e la 33 (Wood Beer, 2 stili), e alcuni nomi erano sbagliati. Il documento
+ufficiale è la fonte di verità; il parser legge un campo per paragrafo.
+
+I blurb in italiano degli stili sono scritti a mano in `scripts/bjcp_blurbs.py` (chiave =
+codice ufficiale o, per gli stili storici non numerati, il nome). I testi ufficiali (aroma,
+aspetto, sapore, corpo, commenti, storia, confronto, ingredienti) sono riportati **verbatim in
+inglese**, perché è il documento con cui i giudici valutano.
+
+**Gli approfondimenti** (30 birre) sono sincronizzati dal gioco BIRRAMON:
+
+```bash
+npm run sync-data                          # cerca ../birramon
+node scripts/sync-data.mjs ~/Progetti/birramon
+```
+
+Lo script copia `types.ts`, `styles.ts`, `beers.ts` e scrive `src/data/source.json` con
+percorso e data dell'ultima sincronizzazione.
 
 ---
 
@@ -96,76 +97,76 @@ smontarla:
 
 ```
 src/
-  data/            ⚠ GENERATO — non modificare qui
-    types.ts         modello di dominio (assi, profili, specie, stili)
-    styles.ts        i 27 stili con descrizione difendibile
-    beers.ts         le 30 birre con storia, origine, abbinamento
-    descriptors.ts   i 34 descrittori con la spiegazione divulgativa
-    source.json      manifesto della sincronizzazione
+  data/
+    types.ts         modello di dominio (specie, stili, profili)   ← da birramon
+    styles.ts        i 27 stili dell'archivio degli approfondimenti ← da birramon
+    beers.ts         le 30 birre con storia, origine, abbinamento   ← da birramon
+    source.json      manifesto della sincronizzazione               ← da birramon
+    bjcp.ts          i 116 stili BJCP 2021, testi e dati vitali     ← dal docx ufficiale
+    bjcp-beers.ts    le 613 birre citate dal BJCP                   ← dal docx ufficiale
   lib/
-    beer.ts          derivate dal corpus: paesi, famiglie, percentili, similarità
-    query.ts         filtri, ricerca testuale, ordinamenti, suggerimenti, URL
-    color.ts         SRM → colore, etichette verbali dell'intensità
+    catalog.ts       enciclopedia BJCP: filtri, ricerca, ordinamenti, URL
+    styleFilter.ts   filtri della guida agli stili: query, ordinamenti, URL
+    compare.ts       carrello del confronto (2–5 stili) e metriche, persistito
+    beer.ts          derivate degli approfondimenti
+    color.ts         SRM → colore
   ui/
     BeerGlass.tsx    bicchiere SVG riempito col colore SRM reale
-    RadarChart.tsx   radar a nove assi + barre del profilo
-    Filters.tsx      pannello filtri, ricerche pronte, intervalli doppi
-    IndexView.tsx    griglia e tabella degli assi
-    DetailView.tsx   la scheda completa
-    CompareView.tsx  confronto, matrice di somiglianza, tabella comparativa
-    AxisGuide.tsx    guida ai nove assi e agli stili
+    SearchBar.tsx       ricerca globale in navbar, con suggerimenti raggruppati
+    CatalogFilters.tsx  pannello filtri del catalogo (e filtri attivi condivisi)
+    CatalogView.tsx     griglia delle birre BJCP
+    BeerPage.tsx        scheda di una birra BJCP (testi dello stile)
+    StyleFilters.tsx    pannello filtri della guida agli stili
+    StyleGuide.tsx      i 116 stili, per categoria (con «＋ Confronta» su ogni card)
+    CompareView.tsx     sezione Confronta: radar, barre [min–max], tabella
+    DeepDives.tsx       elenco e scheda degli approfondimenti
+    charts/             SVG custom: RangeBarChart, RadarChart, useSize (nessuna dipendenza)
   App.tsx            router su hash
+scripts/
+  gen-bjcp-docx.py       genera bjcp.ts e bjcp-beers.ts dal docx BJCP
+  bjcp_blurbs.py         i blurb italiani degli stili (scritti a mano)
+  sync-data.mjs          sincronizza gli approfondimenti da birramon
 ```
 
-Nessuna dipendenza oltre a React. Nessun backend: il corpus è compilato dentro il bundle, quindi
-il sito è un insieme di file statici che si possono servire da qualsiasi parte.
+Nessun backend: tutto il corpus è compilato nel bundle, quindi il sito è un insieme di file
+statici servibili da qualsiasi parte.
 
 ### Router
 
-Tutto lo stato di consultazione vive nell'URL, quindi ogni ricerca è condivisibile:
-
 ```
-#/                                  archivio
-#/?q=ipa&assi=tostatura>=4,amaro<=2
-#/b/pilsner-urquell                 scheda
-#/confronta?b=rauchbier,gueuze      confronto
-#/assi                              guida ai nove assi
-#/stili                             guida agli stili
-```
-
-Il pulsante **copia link** accanto ai filtri attivi copia l'URL della ricerca corrente.
-
----
-
-## Sincronizzare i dati dal gioco
-
-La fonte di verità del corpus è il repository di **BIRRAMON**. BirraDex ne copia quattro file,
-che sono autosufficienti (importano solo da `./types`):
-
-```bash
-npm run sync-data                          # cerca ../birramon
-node scripts/sync-data.mjs ~/Progetti/birramon
+#/                                  i 116 stili BJCP (homepage)
+#/?fam=Lager&abv=8-14               guida agli stili filtrata
+#/birre                             catalogo delle birre
+#/birre?q=stout&stile=15B&abv=8-14  catalogo filtrato
+#/b/pilsner-urquell                 scheda di una birra BJCP
+#/confronta                         confronto fra 2–5 stili
+#/approfondimenti                   le 30 schede curate
+#/a/saison-dupont                   scheda di approfondimento
 ```
 
-Lo script antepone a ogni file un banner di avvertimento e scrive `src/data/source.json` con
-percorso e data dell'ultima sincronizzazione. Se il gioco aggiunge una birra, arriva qui con un
-comando — e viceversa, un filtro che non trova niente qui è un'informazione sul gioco.
+Gli stili storici non hanno un codice a lettera nel documento BJCP (sono «27. Historical
+Beer: Kellerbier»): nel data model hanno un `id` univoco (`27-kellerbier`) e il codice
+mostrato resta `27`.
 
 ---
 
 ## Stato e prossimi passi
 
-**Fatto:** archivio con ricerca testuale AND su tutti i campi, filtri per famiglia/paese/stile,
-intervalli doppi su ABV/IBU/SRM, vincoli su nove assi con istogramma di distribuzione,
-dieci ricerche pronte validate sui dati, ordinamenti (incluso per asse singolo e per aderenza
-al profilo), stato vuoto con suggerimenti di allargamento, griglia e tabella, scheda completa,
-confronto a sei, guide, URL condivisibili, layout mobile con filtri richiudibili.
+**Fatto:** guida ai 116 stili in 34 categorie come homepage, con ricerca in navbar
+e filtri per famiglia, categoria e intervalli ABV/IBU/SRM; catalogo di 613 birre BJCP con
+filtri per categoria, famiglia, stile e intervalli ABV/IBU/SRM, ordinamenti e URL condivisibili;
+scheda birra con i testi ufficiali dello stile; ricerca globale in navbar con suggerimenti
+gruppati (stili e birre); sezione Confronta (2–5 stili) con radar, grafici a barre [min–max] e
+tabella riepilogativa, tutta in SVG custom senza nuove dipendenze; sezione Approfondimenti con
+30 schede scritte a mano; layout mobile con filtri richiudibili.
 
 **Non fatto:**
 
-- Esportazione (CSV, PDF) delle selezioni filtrate.
-- Ricerca per abbinamento gastronomico («cosa bevo con le ostriche»): i dati ci sono già,
-  manca l'indice dedicato.
-- Confronto con intervalli di stile BJCP ufficiali: servirebbe un dataset aggiuntivo.
-- Nessun test automatico. La logica in `lib/query.ts` è pura e testabile con poco.
-- Il corpus è di trenta voci: ogni preset va rivisto quando cresce.
+- I testi ufficiali BJCP nella scheda sono in inglese: una traduzione italiana sarebbe il
+  prossimo miglioramento di sostanza, ma sono centinaia di sezioni.
+- Nessuna indicazione di *quanto* una birra reale si discosti dallo stile: il BJCP non lo
+  dice, e non si inventa.
+- Esportazione (CSV) delle selezioni filtrate.
+- Nessun test automatico. La logica in `lib/catalog.ts` è pura e testabile con poco.
+- Il bundle supera i 500 KB raw (testi BJCP): si può ridurre caricando le sezioni estese
+  solo nella scheda (code-splitting).
