@@ -1,5 +1,5 @@
 // Conversione SRM → colore. Stessa taratura usata nel gioco: gli ancoraggi
-// seguono la scala BJCP semplificata (2 SRM = pilsner, 40 SRM = imperial stout).
+// seguono la scala BJCP semplificata (1 SRM = paglierino, 45 SRM = imperial stout).
 // In un'enciclopedia serve a ricordare che il colore è un dato misurabile.
 
 const ANCHORS: [number, string][] = [
@@ -25,19 +25,25 @@ const hexToRgb = (h: string): [number, number, number] => [
 
 const toHex = (n: number) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
 
+const ANCHOR_MIN = ANCHORS[0][0];
+const ANCHOR_MAX = ANCHORS[ANCHORS.length - 1][0];
+
 export function srmToHex(srm: number): string {
-  const v = Math.max(0.5, Math.min(50, srm));
-  for (let i = 0; i < ANCHORS.length - 1; i++) {
-    const [a, ca] = ANCHORS[i];
-    const [b, cb] = ANCHORS[i + 1];
-    if (v >= a && v <= b) {
-      const t = (v - a) / (b - a);
-      const ra = hexToRgb(ca);
-      const rb = hexToRgb(cb);
-      return `#${toHex(ra[0] + (rb[0] - ra[0]) * t)}${toHex(ra[1] + (rb[1] - ra[1]) * t)}${toHex(ra[2] + (rb[2] - ra[2]) * t)}`;
-    }
-  }
-  return ANCHORS[ANCHORS.length - 1][1];
+  // Il clamp usa gli ancoraggi reali: sotto 1 SRM si resta sul paglierino più
+  // chiaro, sopra 45 SRM sulla imperial stout più scura. Prima il limite
+  // inferiore era 0.5, fuori dal primo segmento: sotto 1 SRM la funzione
+  // restituiva così il colore più scuro invece del più chiaro.
+  const v = Math.max(ANCHOR_MIN, Math.min(ANCHOR_MAX, srm));
+  // L'indice si ferma all'ultimo segmento: il clamp garantisce che l'ancoraggio
+  // superiore esista sempre, quindi il return è unico e non serve fallback.
+  let i = 0;
+  while (i < ANCHORS.length - 2 && v > ANCHORS[i + 1][0]) i++;
+  const [a, ca] = ANCHORS[i];
+  const [b, cb] = ANCHORS[i + 1];
+  const t = (v - a) / (b - a);
+  const ra = hexToRgb(ca);
+  const rb = hexToRgb(cb);
+  return `#${toHex(ra[0] + (rb[0] - ra[0]) * t)}${toHex(ra[1] + (rb[1] - ra[1]) * t)}${toHex(ra[2] + (rb[2] - ra[2]) * t)}`;
 }
 
 export function lighten(hex: string, amount = 0.3): string {
