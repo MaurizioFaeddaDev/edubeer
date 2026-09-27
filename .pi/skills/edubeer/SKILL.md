@@ -57,8 +57,8 @@ Prima di lavorare qui leggi anche lo skill `maistru-craft`
 ## Comandi di verification (conventions/VERIFICATION.md)
 
 ```bash
-npm run build    # typecheck (tsc -b --noEmit) + bundle statico — attualmente l'unico gate
-npm test         # dal ticket T-003 in poi (vitest run)
+npm run build    # typecheck (tsc -b --noEmit) + bundle statico
+npm test         # dal ticket T-003: suite vitest su src/lib/ (vitest run)
 ```
 
 Screenshot UI: skill `frontend-verification`, **uno alla volta** (amdgpu).

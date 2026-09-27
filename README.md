@@ -19,6 +19,7 @@ Niente assi sensoriali, niente punteggi, niente sblocchi: qui si consulta.
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # bundle statico in dist/ — nessuna dipendenza runtime oltre a React
+npm test         # vitest run — suite sulla logica pura di src/lib/
 ```
 
 ---
@@ -171,7 +172,9 @@ filtri per categoria, famiglia, stile e intervalli ABV/IBU/SRM, ordinamenti e UR
 scheda birra con i testi ufficiali dello stile; ricerca globale in navbar con suggerimenti
 gruppati (stili e birre); sezione Confronta (2–5 stili) con radar, grafici a barre [min–max] e
 tabella riepilogativa, tutta in SVG custom senza nuove dipendenze; sezione Approfondimenti con
-30 schede scritte a mano; layout mobile con filtri richiudibili.
+30 schede scritte a mano; layout mobile con filtri richiudibili; **suite vitest (`npm test`)
+sulla logica pura di `src/lib/`** — catalogo, filtro stili, confronto, colore e BeerDex — con i
+conteggi sacri (116 stili, 613 birre, 30 approfondimenti) come guardia anti-regressione.
 
 **Non fatto:**
 
@@ -180,6 +183,5 @@ tabella riepilogativa, tutta in SVG custom senza nuove dipendenze; sezione Appro
 - Nessuna indicazione di *quanto* una birra reale si discosti dallo stile: il BJCP non lo
   dice, e non si inventa.
 - Esportazione (CSV) delle selezioni filtrate.
-- Nessun test automatico. La logica in `lib/catalog.ts` è pura e testabile con poco.
 - Il bundle supera i 500 KB raw (testi BJCP): si può ridurre caricando le sezioni estese
   solo nella scheda (code-splitting).
