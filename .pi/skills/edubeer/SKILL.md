@@ -19,22 +19,22 @@ Prima di lavorare qui leggi anche lo skill `maistru-craft`
   (`ui/charts/`), **zero dipendenze runtime oltre a React**.
 - **Testing**: vitest (dev-only) dal ticket T-003 (conventions/TEST.md). Prima di T-003
   il typecheck è `npm run build` (`tsc -b --noEmit` + vite build).
-- **Styling**: CSS custom con i token storici del progetto, mappati sui semantici
-  maistru-craft (tabella sotto). Nuovi component usano i nomi semantici aziendali.
+- **Styling**: CSS custom che consuma i token aziendali. `src/tokens.css` è
+  **generato** da `maistru-craft/design-system/tokens.css` con `npm run sync-tokens`:
+  si usano solo i nomi semantici (`--background`, `--surface-1..3`, `--border`,
+  `--foreground*`, `--accent*`, `--positive*`, `--danger*`, `--series-1..5`).
+  Identità: neubrutalism disciplinato, tema chiaro **neo-paper** (DESIGN.md v2).
+  Unica eccezione locale: `--foam` (bicchiere SVG). Font display Archivo Variable
+  self-hosted (`src/assets/`, OFL) — asset, non dipendenza runtime.
 - **Deploy**: Vercel, dominio https://edubeer.com, `vercel.json` esplicito
   (`framework: "vite"`, `outputDirectory: "dist"`). Routing su hash: nessun rewrite SPA.
   **Mai modificare `vercel.json` senza ticket.**
 
-### Mapping token (storico → maistru-craft)
+### Token
 
-| edubeer (storico) | maistru-craft (semantico) |
-|---|---|
-| `--bg-0..--bg-3` | `--background`, `--surface-1..3` |
-| `--line`, `--line-soft` | `--border`, `--border-soft` |
-| `--ink`, `--ink-dim`, `--ink-faint` | `--foreground`, `--foreground-muted`, `--foreground-faint` |
-| `--amber`, `--amber-soft` | `--accent`, `--accent-soft` |
-| `--green`, `--green-soft` | `--positive`, `--positive-soft` |
-| `--fs-*`, `--s1..--s8`, `--radius`, `--shadow`, `--measure` | identici (già conformi) |
+La tabella di mapping storico→semantico è **dismessa** (2026-10-24): il CSS non
+usa più `--bg-0`, `--ink`, `--amber`, `--line`, `--green`. I valori vivono in
+`tokens.css`; il progetto non li ridefinisce. `--copper` è fuori dal set v2.
 
 ## Lingua
 
@@ -57,8 +57,9 @@ Prima di lavorare qui leggi anche lo skill `maistru-craft`
 ## Comandi di verification (conventions/VERIFICATION.md)
 
 ```bash
-npm run build    # typecheck (tsc -b --noEmit) + bundle statico
-npm test         # dal ticket T-003: suite vitest su src/lib/ (vitest run)
+npm run build        # typecheck (tsc -b --noEmit) + bundle statico
+npm test             # suite vitest su src/lib/ (vitest run) — include il test di contrasto dei token
+npm run sync-tokens  # riallinea src/tokens.css dalla fonte aziendale
 ```
 
 Screenshot UI: skill `frontend-verification`, **uno alla volta** (amdgpu).
@@ -67,6 +68,9 @@ Screenshot UI: skill `frontend-verification`, **uno alla volta** (amdgpu).
 
 - Logica pura in `src/lib/` (`catalog.ts`, `styleFilter.ts`, `compare.ts`, `beer.ts`,
   `color.ts`) — testabile senza browser, prima cosa da testare.
+- Colori SRM (`lib/color.ts`) sono **dato**, non tema: non si sostituiscono con la palette.
+- Codice colore **locale** della famiglia BJCP (striscia 6px sulle card): Lager blu,
+  Ale giallo, Trappista viola, Spontanea rosa, Speciale verde. Semantico, non aziendale.
 - URL condivisibili: i filtri vivono nella query dell'hash (`#/birre?stile=15B&abv=8-14`)
   — ogni filtro/ordinamento aggiunto deve rispettare questo contratto.
 - Confronta: selezione 2–5 stili in `localStorage`, sopravvive alla navigazione.

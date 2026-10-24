@@ -15,11 +15,17 @@ scheda; Invio cerca la parola nel catalogo delle birre.
 
 Niente assi sensoriali, niente punteggi, niente sblocchi: qui si consulta.
 
+L'interfaccia parla **neubrutalism disciplinato**, tema chiaro “neo-paper”: carta,
+inchiostro, bordi netti, ombre dure. Lo stile vive sui contenitori e sui comandi;
+i testi BJCP lunghi restano su superfici calme e leggibili (dottrina delle zone in
+`design-system/DESIGN.md`, repo maistru-craft).
+
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # bundle statico in dist/ — nessuna dipendenza runtime oltre a React
-npm test         # vitest run — suite sulla logica pura di src/lib/
+npm run dev          # http://localhost:5173
+npm run build        # bundle statico in dist/ — nessuna dipendenza runtime oltre a React
+npm test             # vitest run — logica pura di src/lib/ + contrasto dei token
+npm run sync-tokens  # riallinea src/tokens.css dalla fonte aziendale
 ```
 
 ---
@@ -63,7 +69,28 @@ domanda: non «che stile è?» ma «cosa devo sapere su questa bottiglia?».
 
 ---
 
-## Da dove vengono i dati
+## Identità visiva
+
+Il tema è **neo-paper**: fondo carta `#f5eedc` con trama millimetrata al 6%,
+inchiostro `#191613`, bordi 2px, ombre dure offset senza blur, spigoli 0, un solo
+accento giallo per l'azione. I testi lunghi (BJCP verbatim compreso) stanno su
+superfici calme, senza bordi né ombre; lo stile si scatena solo sui contenitori.
+
+- **Token**: `src/tokens.css` è **generato** da `~/Projects/maistru-craft/design-system/tokens.css`
+  (`npm run sync-tokens`). Nessun colore hardcoded: le uniche eccezioni sono
+  `--foam` (bicchiere SVG), `--caret` (data-URI) e il `meta theme-color`.
+- **Contrasto**: `src/lib/__tests__/tokens.test.ts` calcola i rapporti WCAG dei
+  token e fallisce se una coppia testo/sfondo scende sotto 4.5:1 (3:1 per i confini).
+- **Font**: Archivo Variable self-hosted (`src/assets/archivo-latin.woff2`, OFL,
+  35 KB) solo per i display; il testo resta system-ui. È un asset, non una
+  dipendenza runtime.
+- **Colore semantico locale**: la striscia sinistra delle card dice la famiglia
+  BJCP — Lager blu, Ale giallo, Trappista viola, Spontanea rosa, Speciale verde.
+- **Grafici**: SVG scritti a mano; i colori delle serie vengono dai token
+  `--series-1..5` e il tratteggio distingue le serie senza affidarsi al colore.
+  I colori SRM delle birre restano **dato** e non vengono tematizzati.
+
+---
 
 **Stili e birre BJCP** (`src/data/bjcp.ts`, `src/data/bjcp-beers.ts`) sono generati dal
 **documento ufficiale** `2021_Guidelines_Beer_1.25.docx`:
@@ -105,6 +132,8 @@ src/
     source.json      manifesto della sincronizzazione               ← da birramon
     bjcp.ts          i 116 stili BJCP 2021, testi e dati vitali     ← dal docx ufficiale
     bjcp-beers.ts    le 613 birre citate dal BJCP                   ← dal docx ufficiale
+  tokens.css         design token aziendali                       ← da maistru-craft
+  assets/            Archivo Variable (OFL) + licenza               ← self-hosted
   lib/
     catalog.ts       enciclopedia BJCP: filtri, ricerca, ordinamenti, URL
     styleFilter.ts   filtri della guida agli stili: query, ordinamenti, URL
@@ -129,6 +158,7 @@ scripts/
   gen-bjcp-docx.py       genera bjcp.ts e bjcp-beers.ts dal docx BJCP
   bjcp_blurbs.py         i blurb italiani degli stili (scritti a mano)
   sync-data.mjs          sincronizza gli approfondimenti da birramon
+  sync-tokens.mjs        sincronizza src/tokens.css da maistru-craft
 ```
 
 Nessun backend: tutto il corpus è compilato nel bundle, quindi il sito è un insieme di file
@@ -174,12 +204,14 @@ filtri per categoria, famiglia, stile e intervalli ABV/IBU/SRM, ordinamenti e UR
 scheda birra con i testi ufficiali dello stile; ricerca globale in navbar con suggerimenti
 gruppati (stili e birre); sezione Confronta (2–5 stili) con radar, grafici a barre [min–max] e
 tabella riepilogativa, tutta in SVG custom senza nuove dipendenze; sezione Approfondimenti con
-30 schede scritte a mano; layout mobile con filtri richiudibili; **export CSV delle selezioni
-filtrate** di birre e stili (stesse righe della griglia, BOM UTF-8 e separatore «;» coi numeri
-alla virgola, apribile in Excel/LibreOffice italiani) senza dipendenze aggiuntive; **suite
-vitest (`npm test`)
-sulla logica pura di `src/lib/`** — catalogo, filtro stili, confronto, colore e BeerDex — con i
-conteggi sacri (116 stili, 613 birre, 30 approfondimenti) come guardia anti-regressione.
+30 schede scritte a mano; layout mobile con filtri richiudibili e target touch da 44px;
+**export CSV delle selezioni filtrate** di birre e stili (stesse righe della griglia, BOM UTF-8
+e separatore «;» coi numeri alla virgola, apribile in Excel/LibreOffice italiani) senza
+dipendenze aggiuntive; **suite vitest (`npm test`) sulla logica pura di `src/lib/`** — catalogo,
+filtro stili, confronto, colore, BeerDex e contrasto dei token — con i conteggi sacri (116 stili,
+613 birre, 30 approfondimenti) come guardia anti-regressione; **restyle completo neo-paper**
+(ticket T-006..T-013): token semantici sincronizzati dall'azienda, shell, catalogo, filtri,
+schede, confronto e grafici sul nuovo tema, con card codificate per famiglia BJCP.
 
 **Non fatto:**
 
@@ -189,3 +221,5 @@ conteggi sacri (116 stili, 613 birre, 30 approfondimenti) come guardia anti-regr
   dice, e non si inventa.
 - Il bundle supera i 500 KB raw (testi BJCP): si può ridurre caricando le sezioni estese
   solo nella scheda (code-splitting).
+- Il restyle non è ancora deployato: attende il gate QA e l'OK del CEO. slow-opinions resta
+  sul tema precedente in deroga transitoria; nessun dark mode parallelo.
