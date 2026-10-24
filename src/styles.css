@@ -38,6 +38,9 @@
 
   --radius: 4px;
   --radius-lg: 8px;
+  /* Freccia unica dei controlli a tendina (select nativo e multi-select):
+     disegnata una volta sola, così non dipende dal widget di sistema. */
+  --caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%237b8a6a' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8.2l3.5-3.7'/%3E%3C/svg%3E");
   --shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
   --measure: 68ch;
 }
@@ -256,7 +259,11 @@ em { font-style: normal; }
 .ms-trigger:hover { border-color: var(--green-soft); }
 .ms-trigger.open { border-color: var(--green); }
 .ms-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ms-caret { flex: none; color: var(--ink-faint); font-size: 0.8em; transition: transform 120ms ease; }
+.ms-caret {
+  flex: none; width: 12px; height: 12px;
+  background: var(--caret) no-repeat center / 12px 12px;
+  transition: transform 120ms ease;
+}
 .ms-trigger.open .ms-caret { transform: rotate(180deg); }
 .ms-panel {
   border: 1px solid var(--line); border-radius: var(--radius);
@@ -314,7 +321,11 @@ em { font-style: normal; }
 
 .select {
   width: 100%; font: inherit; font-size: var(--fs-sm);
-  padding: var(--s2) var(--s3); background: var(--bg-0); color: var(--ink);
+  appearance: none; -webkit-appearance: none;
+  padding: var(--s2) calc(var(--s3) + 18px) var(--s2) var(--s3);
+  background: var(--bg-0) var(--caret) no-repeat right var(--s3) center;
+  background-size: 12px 12px;
+  color: var(--ink);
   border: 1px solid var(--line); border-radius: var(--radius);
 }
 .mini {

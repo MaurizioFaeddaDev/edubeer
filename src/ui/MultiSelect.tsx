@@ -85,7 +85,7 @@ export function MultiSelect({
             ? `${selected.length} ${selected.length === 1 ? 'selezionata' : 'selezionate'}`
             : placeholder}
         </span>
-        <span className="ms-caret" aria-hidden="true">▾</span>
+        <span className="ms-caret" aria-hidden="true" />
       </button>
 
       {open && (
