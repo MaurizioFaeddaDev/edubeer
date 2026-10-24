@@ -6,6 +6,8 @@ import { CATEGORIES, STYLES, beersOfStyle as bjcpBeers } from '../lib/catalog';
 import { countStyleFilters, searchStyles } from '../lib/styleFilter';
 import type { StyleQuery } from '../lib/styleFilter';
 import { beersOfStyle as curatedOfStyle } from '../lib/beer';
+import { STYLE_CSV_FILENAME, stylesCsv } from '../lib/csv';
+import { ExportCsvButton } from './ExportCsvButton';
 import { MAX_COMPARE, MIN_COMPARE, toggleCompare, useCompare } from '../lib/compare';
 import type { BeerSpecies } from '../data/types';
 
@@ -70,10 +72,15 @@ export function StyleGuide({
           {CATEGORIES.length} categorie. La BJCP è il linguaggio comune dei giudici: se un
           birraio dice «è fuori stile», sta citando questo documento.
         </p>
-        <p className="guide-count">
-          <b>{filtered.length}</b> {filtered.length === 1 ? 'stile' : 'stili'}
-          {active > 0 ? ' con i filtri attivi' : ' in ordine ufficiale'}
-        </p>
+        <div className="guide-tools">
+          <p className="guide-count">
+            <b>{filtered.length}</b> {filtered.length === 1 ? 'stile' : 'stili'}
+            {active > 0 ? ' con i filtri attivi' : ' in ordine ufficiale'}
+          </p>
+          {filtered.length > 0 && (
+            <ExportCsvButton filename={STYLE_CSV_FILENAME} build={() => stylesCsv(filtered)} />
+          )}
+        </div>
         <CompareHint />
       </header>
 

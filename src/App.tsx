@@ -8,8 +8,10 @@ import { DeepDiveList, DeepDivePage } from './ui/DeepDives';
 import { StyleGuide } from './ui/StyleGuide';
 import { CompareView } from './ui/CompareView';
 import { SearchBar } from './ui/SearchBar';
+import { ExportCsvButton } from './ui/ExportCsvButton';
 import { useCompare } from './lib/compare';
 import { speciesOf } from './lib/beer';
+import { BEER_CSV_FILENAME, beersCsv } from './lib/csv';
 import {
   EMPTY_STYLE_QUERY, countStyleFilters, fromStyleSearch, searchStyles, toStyleSearch,
 } from './lib/styleFilter';
@@ -172,6 +174,12 @@ export default function App() {
               <CatalogFilters query={query} onChange={setQuery} resultCount={results.length} />
             </div>
             <div className="content">
+              {results.length > 0 && (
+                <div className="results-bar">
+                  <span>{results.length} {results.length === 1 ? 'birra' : 'birre'}</span>
+                  <ExportCsvButton filename={BEER_CSV_FILENAME} build={() => beersCsv(results)} />
+                </div>
+              )}
               <ActiveCatalogFilters query={query} onChange={setQuery} />
               {activeCount === 0 && (
                 <div className="intro">

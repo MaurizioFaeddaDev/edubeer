@@ -108,6 +108,7 @@ src/
   lib/
     catalog.ts       enciclopedia BJCP: filtri, ricerca, ordinamenti, URL
     styleFilter.ts   filtri della guida agli stili: query, ordinamenti, URL
+    csv.ts           export CSV delle selezioni: escaping RFC 4180, numeri it-IT, zero dipendenze
     compare.ts       carrello del confronto (2–5 stili) e metriche, persistito
     beer.ts          derivate degli approfondimenti
     color.ts         SRM → colore
@@ -119,6 +120,7 @@ src/
     BeerPage.tsx        scheda di una birra BJCP (testi dello stile)
     StyleFilters.tsx    pannello filtri della guida agli stili
     StyleGuide.tsx      i 116 stili, per categoria (con «＋ Confronta» su ogni card)
+    ExportCsvButton.tsx button «Esporta CSV»: blob + download, nessuna navigazione
     CompareView.tsx     sezione Confronta: radar, barre [min–max], tabella
     DeepDives.tsx       elenco e scheda degli approfondimenti
     charts/             SVG custom: RangeBarChart, RadarChart, useSize (nessuna dipendenza)
@@ -172,7 +174,10 @@ filtri per categoria, famiglia, stile e intervalli ABV/IBU/SRM, ordinamenti e UR
 scheda birra con i testi ufficiali dello stile; ricerca globale in navbar con suggerimenti
 gruppati (stili e birre); sezione Confronta (2–5 stili) con radar, grafici a barre [min–max] e
 tabella riepilogativa, tutta in SVG custom senza nuove dipendenze; sezione Approfondimenti con
-30 schede scritte a mano; layout mobile con filtri richiudibili; **suite vitest (`npm test`)
+30 schede scritte a mano; layout mobile con filtri richiudibili; **export CSV delle selezioni
+filtrate** di birre e stili (stesse righe della griglia, BOM UTF-8 e separatore «;» coi numeri
+alla virgola, apribile in Excel/LibreOffice italiani) senza dipendenze aggiuntive; **suite
+vitest (`npm test`)
 sulla logica pura di `src/lib/`** — catalogo, filtro stili, confronto, colore e BeerDex — con i
 conteggi sacri (116 stili, 613 birre, 30 approfondimenti) come guardia anti-regressione.
 
@@ -182,6 +187,5 @@ conteggi sacri (116 stili, 613 birre, 30 approfondimenti) come guardia anti-regr
   prossimo miglioramento di sostanza, ma sono centinaia di sezioni.
 - Nessuna indicazione di *quanto* una birra reale si discosti dallo stile: il BJCP non lo
   dice, e non si inventa.
-- Esportazione (CSV) delle selezioni filtrate.
 - Il bundle supera i 500 KB raw (testi BJCP): si può ridurre caricando le sezioni estese
   solo nella scheda (code-splitting).
