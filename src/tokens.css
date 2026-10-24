@@ -4,7 +4,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    maistru-craft — design tokens condivisi (tutti i progetti) — v2
    Identità: il METODO, non la palette. Neubrutalism disciplinato, tema
-   "neo-paper": carta chiara, inchiostro, bordi netti, ombre dure, radius 0.
+   "neo-paper": carta chiara, inchiostro, bordi netti, ombre dure, raggi morbidi.
    Dottrina delle zone (DESIGN.md): lo stile urla sui contenitori (zona B),
    la lettura resta nuda (zona A). Contrasti calcolati, mai presunti.
    Revoca motivata dell'identità editoriale scura: CEO, 2026-10-24.
@@ -76,9 +76,12 @@
   --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
   --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
 
-  /* ── Forma e profondità: spigolo vivo, ombra dura senza blur ───────────── */
-  --radius: 0px;
-  --radius-lg: 0px;
+  /* ── Forma e profondità: angoli morbidi, ombra dura senza blur ─────────── */
+  --radius-xs: 4px;           /* micro-tag: codice, kbd, swatch SRM, caret */
+  --radius-sm: 8px;           /* comandi: nav, input, select, bottoni, note */
+  --radius: 14px;             /* contenitori: card, pannelli, chart-card */
+  --radius-lg: 18px;          /* popover, empty state */
+  --radius-pill: 999px;       /* chip, badge, contatori */
   --bw-1: 1px;
   --bw-2: 2px;
   --bw-3: 3px;
