@@ -1,9 +1,9 @@
 # Ticket T-005 — Famiglia `.mini`: tap target, contrasto, scala di spaziatura
 
 - **id**: T-005
-- **tipo**: chore / design (passa da ui-designer)
-- **stato**: open
-- **priorità**: P3 (backlog, nessun blocco)
+- **tipo**: chore / design
+- **stato**: wontfix
+- **priorità**: —
 - **complessità**: S/M
 - **dipendenze**: nessuna (emerso dal QA visuale di T-002)
 
@@ -14,28 +14,28 @@ Come lettrice su telefono o tablet, voglio che i piccoli comandi di contorno
 toccare e chiaramente riconoscibili come comandi, senza cambiare il registro
 editoriale dell'app.
 
-## Acceptance criteria
+## Acceptance criteria (trasferiti — verificati in T-008)
 
-- [ ] Ogni bottone della famiglia `.mini` ha un target touch ≥ 44×44 px su mobile
-      (DESIGN.md §5) — oggi `.mini` misura ~27px di altezza
-- [ ] Il confine del bottone raggiunge il contrasto 3:1 richiesto per i confini dei
-      componenti (WCAG 1.4.11) — oggi bordo `--line` su `--bg-2` = 1.48:1
-- [ ] Il padding di `.mini` usa la scala aziendale (`--s1..--s8`), non `3px` fuori scala
-- [ ] Le due tipografie di conteggio («N birre» mono in `.results-bar`, «**N** stili»
-      in `.guide-count`) parlano la stessa lingua, o la differenza è una scelta motivata
-- [ ] Zero colori hardcoded: solo token del design system
-- [ ] `npm test` e `npm run build` verdi; screenshot mobile (390×844) e desktop (1280×900)
-      ricontrollati dal QA visuale
+- [x] Ogni bottone della famiglia `.mini` ha un target touch ≥ 44×44 px su mobile
+- [x] Il confine dei componenti arriva a contrasto ≥ 3:1 (WCAG 1.4.11)
+- [x] Il padding usa la scala aziendale (`--s1..--s8`), niente `3px` fuori scala
+- [x] I contatori parlano la stessa lingua (una sola convenzione)
+- [x] Zero colori hardcoded
+- [x] `npm test` e `npm run build` verdi con QA visuale
 
-## Note
+## Motivazione del WONTFIX
 
-- La variante `.mini-tap` introdotta in T-002 (min-height 44px su `.mini-tap`, breakpoint
-  560px) è una mitigazione locale: se la famiglia `.mini` viene corretta, `.mini-tap`
-  sparisce.
-- Interessa più viste (filtri, tabella tecnica, confronto, export): per questo non è
-  stato risolto dentro T-002 ma è un ticket di design a sé.
+**Assorbito da T-008 (gli AC passano lì).** Il restyle neubrutalism deciso dal
+CEO (2026-10-24) ricostruisce comandi, chip e bottoni con la nuova identità:
+sistemare i minimi di `.mini` a metà sarebbe doppio lavoro con la famiglia
+`.mini` che ricomincia nel tema chiaro "neo-paper". Anche `.mini-tap`
+(mitigazione locale di T-002, già prevista transitoria nelle note originali)
+si elimina in T-008, come da AC.
 
 ## Registro
 
 - 2026-10-20 — aperto dall'orchestratore su segnalazione del QA visuale di T-002
   (minori 2, 3 e 4 del suo verdetto).
+- 2026-10-24 — **wontfix** (PM su decisione CEO, restyle neobrutalism): assorbito
+  da T-008, gli AC passano lì.
+- 2026-10-24 — AC verificati in T-008 (tap 44px anche per nav/chip, contrasto bordi, `.mini-tap` eliminata).
