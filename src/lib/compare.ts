@@ -14,8 +14,11 @@ export const MIN_COMPARE = 2;
 export const MAX_COMPARE = 5;
 const STORAGE_KEY = 'edubeer.compare.v1';
 
-/** Palette fissa: un colore per posizione di selezione, stabile fra i grafici. */
-export const STYLE_COLORS = ['#d9a441', '#5b8dd9', '#8bac0f', '#c0563a', '#a06bd6'];
+/** Palette fissa: un colore per posizione di selezione, stabile fra i grafici.
+ *  Sono token CSS, non hex: il tema vive in src/tokens.css. */
+export const STYLE_COLORS = [
+  'var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)', 'var(--series-5)',
+];
 export const styleColor = (index: number): string => STYLE_COLORS[index % STYLE_COLORS.length];
 
 // ── Carrello ────────────────────────────────────────────────────────────────

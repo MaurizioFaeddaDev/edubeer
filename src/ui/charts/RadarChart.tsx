@@ -6,11 +6,12 @@ import { useSize } from './useSize';
 // ─────────────────────────────────────────────────────────────────────────────
 // Radar a cinque assi (ABV, IBU, SRM, OG, FG). La linea piena è il valore
 // medio dello stile; il trattino lungo l'asse è l'intervallo [min–max]
-// dichiarato dal BJCP. La legenda mostra/nasconde gli stili e l'hover ne
-// evidenzia uno solo. OG/FG compaiono qui per dare cinque vertici al pentagono.
+// dichiarato dal BJCP. Il tratteggio della linea distingue le serie anche
+// senza colore. La legenda mostra/nasconde gli stili e l'hover ne evidenzia uno.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const LINE_SOFT = '#26331a';
+/** Tratteggi per serie: la differenza non è affidata al solo colore. */
+const DASH = ['none', '8 4', '2 3', '10 3 2 3', '4 2'];
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
@@ -63,11 +64,11 @@ export function RadarChart({
         >
           {/* griglia */}
           {[0.2, 0.4, 0.6, 0.8, 1].map((f) => (
-            <polygon key={f} points={RADAR_METRICS.map((_, i) => pt(i, radius * f).join(',')).join(' ')} fill="none" stroke={LINE_SOFT} />
+            <polygon key={f} className="chart-grid" points={RADAR_METRICS.map((_, i) => pt(i, radius * f).join(',')).join(' ')} fill="none" />
           ))}
           {RADAR_METRICS.map((_, i) => {
             const [x, y] = pt(i, radius);
-            return <line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke={LINE_SOFT} />;
+            return <line key={i} className="chart-grid" x1={cx} y1={cy} x2={x} y2={y} />;
           })}
 
           {/* etichette degli assi */}
@@ -84,10 +85,11 @@ export function RadarChart({
           })}
 
           {/* stili */}
-          {styles.map((style) => {
+          {styles.map((style, seriesIndex) => {
             if (hidden.has(style.id)) return null;
             const axes = axesOf(style);
             const color = colorOf(style.id);
+            const dash = DASH[seriesIndex % DASH.length];
             const dimmed = hover != null && hover !== style.id;
             const present = axes.filter((a): a is AxisPoint => a != null);
 
@@ -99,11 +101,18 @@ export function RadarChart({
                 onPointerLeave={() => setHover(null)}
               >
                 {present.length >= 3 && (
-                  <polygon points={RADAR_METRICS.map((_, i) => {
-                    const a = axes[i];
-                    if (!a) return null;
-                    return pt(i, radius * a.mid).join(',');
-                  }).filter((p): p is string => p != null).join(' ')} fill={color} fillOpacity={0.16} stroke={color} strokeWidth={2} strokeLinejoin="round" />
+                  <polygon
+                    points={RADAR_METRICS.map((_, i) => {
+                      const a = axes[i];
+                      if (!a) return null;
+                      return pt(i, radius * a.mid).join(',');
+                    }).filter((p): p is string => p != null).join(' ')}
+                    style={{ fill: color, stroke: color }}
+                    fillOpacity={0.14}
+                    strokeWidth={2.5}
+                    strokeDasharray={dash}
+                    strokeLinejoin="round"
+                  />
                 )}
 
                 {/* intervalli [min–max] sugli assi */}
@@ -112,7 +121,7 @@ export function RadarChart({
                   const [x1, y1] = pt(i, radius * a.min);
                   const [x2, y2] = pt(i, radius * a.max);
                   return (
-                    <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth={4} strokeLinecap="round" opacity={0.55} />
+                    <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} style={{ stroke: color }} strokeWidth={4} strokeLinecap="round" opacity={0.55} />
                   );
                 })}
 
@@ -120,7 +129,7 @@ export function RadarChart({
                 {axes.map((a, i) => {
                   if (!a) return null;
                   const [x, y] = pt(i, radius * a.mid);
-                  return <circle key={i} cx={x} cy={y} r={3.2} fill={color} />;
+                  return <circle key={i} className="chart-dot" cx={x} cy={y} r={3.2} style={{ fill: color }} />;
                 })}
               </g>
             );
@@ -129,9 +138,10 @@ export function RadarChart({
       )}
 
       <div className="radar-legend">
-        {styles.map((style) => {
+        {styles.map((style, seriesIndex) => {
           const hasAny = RADAR_METRICS.some((m) => m.pair(style) != null);
           const off = hidden.has(style.id);
+          const color = colorOf(style.id);
           return (
             <button
               key={style.id}
@@ -146,7 +156,15 @@ export function RadarChart({
               onPointerLeave={() => setHover(null)}
               title={off ? 'Mostra' : 'Nascondi'}
             >
-              <i className="dot" style={{ background: colorOf(style.id) }} />
+              <i className="dot" style={{ background: color }} />
+              <svg className="legend-dash" width="16" height="8" aria-hidden="true">
+                <line
+                  x1="1" y1="4" x2="15" y2="4"
+                  style={{ stroke: color }}
+                  strokeWidth="2.5"
+                  strokeDasharray={DASH[seriesIndex % DASH.length]}
+                />
+              </svg>
               {style.code} · {style.name}
               {!hasAny && <em> n.d.</em>}
             </button>
@@ -158,7 +176,7 @@ export function RadarChart({
         {hovered
           ? (
             <span>
-              <b style={{ color: colorOf(hovered.id) }}>{hovered.name}</b>
+              <b>{hovered.name}</b>
               {' — '}
               {RADAR_METRICS.map((m) => `${m.short} ${pairLabel(m.pair(hovered), m.unit, m.digits)}`).join(' · ')}
             </span>

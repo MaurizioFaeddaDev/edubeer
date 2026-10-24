@@ -18,10 +18,8 @@ const PAD_TOP = 12;
 const PAD_RIGHT = 16;
 const PAD_BOTTOM = 30;
 
-const INK = '#eef3df';
-const INK_FAINT = '#7b8a6a';
-const LINE = '#33421f';
-const LINE_SOFT = '#26331a';
+// I colori arrivano dal CSS (.chart-grid/.chart-axis/.chart-mid/.chart-name):
+// nei TSX restano solo le struttura e i token delle serie.
 
 const truncate = (s: string, n: number): string => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
 const safeId = (id: string): string => id.replace(/[^a-zA-Z0-9-]/g, '');
@@ -45,7 +43,7 @@ export function RangeBarChart({
   const [tip, setTip] = useState<Tip | null>(null);
 
   const narrow = width < 560;
-  const gutter = narrow ? 118 : 150;
+  const gutter = narrow ? 132 : 186;
   const plotW = Math.max(10, width - gutter - PAD_RIGHT);
   const plotH = styles.length * ROW_H;
   const H = PAD_TOP + plotH + PAD_BOTTOM;
@@ -98,11 +96,11 @@ export function RangeBarChart({
           {/* griglia e tick */}
           {ticks.map((t) => (
             <g key={t}>
-              <line x1={x(t)} y1={PAD_TOP} x2={x(t)} y2={PAD_TOP + plotH} stroke={LINE_SOFT} />
+              <line className="chart-grid" x1={x(t)} y1={PAD_TOP} x2={x(t)} y2={PAD_TOP + plotH} />
               <text className="chart-tick" x={x(t)} y={H - 10} textAnchor="middle">{fmt(t, metric.digits)}</text>
             </g>
           ))}
-          <line x1={gutter} y1={PAD_TOP + plotH} x2={gutter + plotW} y2={PAD_TOP + plotH} stroke={LINE} />
+          <line className="chart-axis" x1={gutter} y1={PAD_TOP + plotH} x2={gutter + plotW} y2={PAD_TOP + plotH} />
 
           {styles.map((style, i) => {
             const pair = metric.pair(style);
@@ -122,22 +120,24 @@ export function RangeBarChart({
               >
                 <rect x={0} y={cy - ROW_H / 2} width={width} height={ROW_H} fill="transparent" />
                 <text className="chart-label" x={0} y={cy} dominantBaseline="central">
-                  <tspan fill={color} fontWeight={700}>{style.code}</tspan>
-                  <tspan dx={6} fill={INK}>{truncate(style.name, narrow ? 12 : 19)}</tspan>
+                  <tspan className="chart-code" fontWeight={700}>{style.code}</tspan>
+                  <tspan dx={6} className="chart-name">{truncate(style.name, narrow ? 16 : 26)}</tspan>
                 </text>
 
                 {has ? (
                   <g>
                     <rect
-                      x={minX} y={cy - 6} width={Math.max(2, maxX - minX)} height={12} rx={3}
-                      fill={isSrm ? `url(#rg-${uid}-${safeId(style.id)})` : color}
+                      className="chart-bar"
+                      x={minX} y={cy - 6} width={Math.max(2, maxX - minX)} height={12}
+                      style={{ fill: isSrm ? `url(#rg-${uid}-${safeId(style.id)})` : color }}
                     />
-                    <circle cx={minX} cy={cy} r={2.6} fill={isSrm ? srmToHex(pair[0]) : color} />
-                    <circle cx={maxX} cy={cy} r={2.6} fill={isSrm ? srmToHex(pair[1]) : color} />
-                    <line x1={midX} y1={cy - 9} x2={midX} y2={cy + 9} stroke={color} strokeWidth={2} />
+                    <circle className="chart-dot" cx={minX} cy={cy} r={3} style={{ fill: isSrm ? srmToHex(pair[0]) : color }} />
+                    <circle className="chart-dot" cx={maxX} cy={cy} r={3} style={{ fill: isSrm ? srmToHex(pair[1]) : color }} />
+                    <line className="chart-mid-halo" x1={midX} y1={cy - 9} x2={midX} y2={cy + 9} strokeWidth={6} />
+                    <line className="chart-mid" x1={midX} y1={cy - 9} x2={midX} y2={cy + 9} strokeWidth={2.5} />
                   </g>
                 ) : (
-                  <text className="chart-label" x={gutter + 6} y={cy} dominantBaseline="central" fill={INK_FAINT}>n.d.</text>
+                  <text className="chart-label chart-note" x={gutter + 6} y={cy} dominantBaseline="central">n.d.</text>
                 )}
               </g>
             );
