@@ -1,6 +1,6 @@
 ---
 name: edubeer
-description: Convenzioni del progetto edubeer (enciclopedia BJCP delle birre, https://edubeer.com) — usare per ogni lavoro su ~/Projects/edubeer: stack, fonti dati sacre, comandi di verification, lingua, mapping dei token maistru-craft.
+description: "Convenzioni del progetto edubeer (enciclopedia BJCP delle birre, https://edubeer.com) — usare per ogni lavoro su ~/Projects/edubeer: stack, fonti dati sacre, comandi di verification, lingua, mapping dei token maistru-craft."
 ---
 
 # edubeer — skill di progetto
