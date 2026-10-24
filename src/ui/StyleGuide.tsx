@@ -145,7 +145,7 @@ function StyleCard({
   const count = bjcpBeers(st.id).length;
   const curated = curatedFor(st);
   return (
-    <article className="bjcp-style" id={`bjcp-${st.id}`}>
+    <article className="bjcp-style" data-family={st.family} id={`bjcp-${st.id}`}>
       <header>
         <code className="bjcp-code">{st.code}</code>
         <h4>{st.name}</h4>

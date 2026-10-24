@@ -8,7 +8,7 @@ export function ExportCsvButton({ filename, build }: { filename: string; build: 
   return (
     <button
       type="button"
-      className="mini mini-tap"
+      className="mini"
       onClick={() => downloadCsv(filename, build())}
       title={`Scarica ${filename}`}
     >

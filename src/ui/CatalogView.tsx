@@ -26,7 +26,7 @@ export function CatalogView({ beers, onOpen }: { beers: BjcpBeer[]; onOpen: (id:
         const s = styleOfBeer(b);
         if (!s) return null;
         return (
-          <article className="bcard" key={b.id}>
+          <article className="bcard" data-family={s.family} key={b.id}>
             <button className="bcard-main" onClick={() => onOpen(b.id)}>
               <BeerGlass srm={srmOf(b) ?? 6} level={1} shape="tulipano" size={40} />
               <div className="bcard-text">
@@ -37,7 +37,13 @@ export function CatalogView({ beers, onOpen }: { beers: BjcpBeer[]; onOpen: (id:
                 <p className="bcard-meta">
                   {s.abv == null && s.ibu == null && s.srm == null
                     ? 'numeri non dichiarati dal BJCP'
-                    : `${rangeLabel(s.abv, '%')} · ${rangeLabel(s.ibu, ' IBU')} · ${s.color ? `SRM ${s.color[0]}–${s.color[1]}` : 'SRM —'}`}
+                    : (
+                      <>
+                        <span>{rangeLabel(s.abv, '%')}</span>
+                        <span>{rangeLabel(s.ibu, ' IBU')}</span>
+                        <span>{s.color ? `SRM ${s.color[0]}–${s.color[1]}` : 'SRM —'}</span>
+                      </>
+                    )}
                 </p>
                 <p className="bcard-cat">{s.category}</p>
               </div>

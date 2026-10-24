@@ -118,30 +118,27 @@ export function BeerGlass({
             {/* schiuma */}
             {foamHeight > 0 && (
               <g>
-                <rect x="0" y={top} width="100" height={foamHeight} fill="#fdf8e4" />
-                <circle cx="18" cy={top + foamHeight} r="5" fill="#fdf8e4" />
-                <circle cx="36" cy={top + foamHeight + 2} r="7" fill="#fdf8e4" />
-                <circle cx="55" cy={top + foamHeight} r="6" fill="#fdf8e4" />
-                <circle cx="74" cy={top + foamHeight + 2} r="5" fill="#fdf8e4" />
+                <rect x="0" y={top} width="100" height={foamHeight} className="beer-foam" />
+                <circle cx="18" cy={top + foamHeight} r="5" className="beer-foam" />
+                <circle cx="36" cy={top + foamHeight + 2} r="7" className="beer-foam" />
+                <circle cx="55" cy={top + foamHeight} r="6" className="beer-foam" />
+                <circle cx="74" cy={top + foamHeight + 2} r="5" className="beer-foam" />
               </g>
             )}
             {/* bollicine */}
-            <circle cx="40" cy={s.bottomY - 24} r="1.6" fill="rgba(255,255,255,0.5)" />
-            <circle cx="58" cy={s.bottomY - 42} r="1.3" fill="rgba(255,255,255,0.45)" />
-            <circle cx="48" cy={s.bottomY - 60} r="1.1" fill="rgba(255,255,255,0.4)" />
+            <circle cx="40" cy={s.bottomY - 24} r="1.6" className="beer-foam" fillOpacity="0.55" />
+            <circle cx="58" cy={s.bottomY - 42} r="1.3" className="beer-foam" fillOpacity="0.45" />
+            <circle cx="48" cy={s.bottomY - 60} r="1.1" className="beer-foam" fillOpacity="0.4" />
           </g>
 
           {/* vetro */}
           <path
             d={s.outline}
-            fill="rgba(255,255,255,0.07)"
-            stroke="#e8f0d0"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
+            className="beer-glass"
             vectorEffect="non-scaling-stroke"
           />
           {/* riflesso */}
-          <path d={s.bowl} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="0.8" />
+          <path d={s.bowl} className="beer-shine" />
         </g>
       </svg>
     </div>

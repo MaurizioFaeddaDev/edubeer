@@ -41,7 +41,7 @@ export function BeerPage({
   const siblings = beersOfStyle(s.id).filter((b) => b.id !== beer.id);
 
   return (
-    <article className="detail">
+    <article className="detail" data-family={s.family}>
       <button className="link back" onClick={onBack}>← Enciclopedia</button>
 
       <header className="detail-head">
