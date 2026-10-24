@@ -8,5 +8,6 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/lib/**/*.test.ts'],
+    css: true, // serve a importare src/tokens.css?raw nel test di contrasto
   },
 });
