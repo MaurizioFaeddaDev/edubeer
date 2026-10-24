@@ -9,7 +9,8 @@
     "build": "tsc -b --noEmit && vite build",
     "test": "vitest run",
     "preview": "vite preview",
-    "sync-data": "node scripts/sync-data.mjs"
+    "sync-data": "node scripts/sync-data.mjs",
+    "sync-tokens": "node scripts/sync-tokens.mjs"
   },
   "dependencies": {
     "react": "^19.1.0",

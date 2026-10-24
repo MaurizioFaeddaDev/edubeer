@@ -1,0 +1,97 @@
+/* ⚠ FILE GENERATO — non modificare qui.
+   Sincronizzato da maistru-craft/design-system/tokens.css con: npm run sync-tokens */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   maistru-craft — design tokens condivisi (tutti i progetti) — v2
+   Identità: il METODO, non la palette. Neubrutalism disciplinato, tema
+   "neo-paper": carta chiara, inchiostro, bordi netti, ombre dure, radius 0.
+   Dottrina delle zone (DESIGN.md): lo stile urla sui contenitori (zona B),
+   la lettura resta nuda (zona A). Contrasti calcolati, mai presunti.
+   Revoca motivata dell'identità editoriale scura: CEO, 2026-10-24.
+   Nessun colore hardcoded nei progetti: solo var(--...) da questo set.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Superfici ─────────────────────────────────────────────────────────── */
+  --background: #f5eedc;      /* carta: la pagina                                     */
+  --surface-1: #fffcf3;       /* pannello: card, popover, campi                       */
+  --surface-2: #f6ecd4;       /* hover, testata tabella, tracce                       */
+  --surface-3: #efe3c4;       /* thead, track degli slider                            */
+
+  /* ── Inchiostro e confini ──────────────────────────────────────────────── */
+  --border: #191613;          /* il bordo È l'inchiostro (strutturale, 2px)           */
+  --border-soft: #cfc3a6;     /* hairline decorativa: mai unico confine di un controllo */
+  --foreground: #191613;      /* testo principale (15.6:1 su carta)                   */
+  --foreground-muted: #453f33;/* testo secondario (9.0:1)                             */
+  --foreground-faint: #6a6252;/* micro-testo e tick (5.2:1)                           */
+
+  /* ── Pieni: si usano come sfondo, MAI come testo ───────────────────────── */
+  --accent: #ffc53d;          /* giallo: filtro attivo, azione primaria               */
+  --accent-2: #62a0e8;        /* blu: selezione, confronto                            */
+  --accent-3: #a88be0;        /* viola: categorie, dati secondari                     */
+  --accent-4: #f27ea9;        /* rosa: editoriale, empty state                        */
+  --positive: #b5e048;        /* conferma, check attivo                               */
+  --danger: #f0705a;          /* errore, azione distruttiva                           */
+
+  /* Tinte soft: evidenziatore, riga hover, callout (solo con il proprio -ink) */
+  --accent-soft: #ffe9a8;
+  --accent-2-soft: #d8e8fb;
+  --accent-3-soft: #e7dff7;
+  --accent-4-soft: #fcdce8;
+  --positive-soft: #e6f4c4;
+  --danger-soft: #fbd9d2;
+
+  /* Inchiostri AA: ogni pieno ha la sua versione testuale (≥ 4.5:1 su carta) */
+  --accent-ink: #7a4e0b;      /* 7.0:1 su surface-1 */
+  --accent-2-ink: #215e9e;    /* 6.5:1 */
+  --accent-3-ink: #5f4399;    /* 7.4:1 */
+  --accent-4-ink: #b0356b;    /* 5.7:1 */
+  --positive-ink: #3f6b0a;    /* 6.2:1 */
+  --danger-ink: #9c3a20;      /* 6.7:1 */
+
+  /* Palette dataviz: SOLO fill e dot (sempre bordati d'inchiostro), mai testo.
+     Il testo di una serie usa la coppia -ink corrispondente. */
+  --series-1: #e39b25;
+  --series-2: #4e86d4;
+  --series-3: #7fa314;
+  --series-4: #c4553b;
+  --series-5: #8f62c9;
+
+  /* ── Tipografia ───────────────────────────────────────────────────────── */
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+  /* Display: unico font eventualmente self-hosted (OFL). Fallback = body. */
+  --font-display: "Archivo Variable", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --fs-xs: 0.72rem;
+  --fs-sm: 0.82rem;
+  --fs-md: 0.95rem;
+  --fs-lg: 1.1rem;
+  --fs-xl: 1.35rem;
+  --fs-2xl: 1.9rem;
+  --fs-3xl: 2.6rem;
+  --fs-display: clamp(2.75rem, 7vw, 4.25rem); /* solo h1 di pagina */
+  --measure: 68ch;            /* misura del testo: si legge, non si gioca */
+
+  /* ── Spaziatura — scala 4px ────────────────────────────────────────────── */
+  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
+  --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
+
+  /* ── Forma e profondità: spigolo vivo, ombra dura senza blur ───────────── */
+  --radius: 0px;
+  --radius-lg: 0px;
+  --bw-1: 1px;
+  --bw-2: 2px;
+  --bw-3: 3px;
+  --shadow-hard-sm: 3px 3px 0 0 var(--border);
+  --shadow-hard: 4px 4px 0 0 var(--border);
+  --shadow-hard-lg: 7px 7px 0 0 var(--border);
+
+  /* ── Movimento: scatto, non rimbalzo ───────────────────────────────────── */
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --ease-snap: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* ── Trama carta millimetrata (fondo pagina, 6% = nessun impatto AA) ───── */
+  --grid: 24px;
+  --grid-line: color-mix(in srgb, var(--foreground) 6%, transparent);
+}
