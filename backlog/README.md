@@ -9,7 +9,7 @@ Indice del backlog. Stato e dettagli vivono nei file dei ticket (conventions/BAC
 | [T-008](T-008-filtri-input-chip-bottoni-neobrutalism.md) | Filtri, input, chip e bottoni (+ T-005) | feat / design | done | P1 | M |
 | [T-009](T-009-schede-dettaglio-neobrutalism.md) | Schede dettaglio (birra/stile/approfondimento) | feat / design | done | P1 | M |
 | [T-010](T-010-confronto-grafici-tabelle-neobrutalism.md) | Confronto, grafici SVG, tabelle + debito hex | feat / refactor / design | done | P1 | M |
-| [T-011](T-011-qa-accessibilita-gate-deploy-neobrutalism.md) | QA accessibilità + gate deploy epic | chore / quality | in-progress | P0 (finale) | S |
+| [T-011](T-011-qa-accessibilita-gate-deploy-neobrutalism.md) | QA accessibilità + gate deploy epic | chore / quality | done | P0 (finale) | S |
 | [T-012](T-012-documentazione-restyle-neobrutalism.md) | Documentazione restyle (README, skill, DESIGN.md v2, PROGETTI.md) | docs | done | P2 | S |
 | [T-013](T-013-font-archivo-variable-selfhosted.md) | Font display Archivo Variable OFL self-hosted | feat | done | P2 | S |
 | [T-014](T-014-raggi-morbidi-neo-paper.md) | Ammorbidire il tema: scala di raggi | feat / design | done | P1 | S |
@@ -28,7 +28,7 @@ chiaro "neo-paper" su tutta l'app. Revoca dell'identità editoriale scura:
 **identity = metodo** (zone A/B, token, contrasto verificato), **palette = tema**.
 Slow-opinions resta in deroga transitoria documentata (non si tocca in questo epic).
 
-**Ordine di esecuzione:**
+**Ordine di esecuzione (completato il 2026-10-24):**
 
 ```
 T-006 (fondazione token + shell)

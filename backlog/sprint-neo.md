@@ -88,12 +88,12 @@ revoca + cosa NON fatto).
 | T-008 | done | tap 44px, `.mini-tap` eliminata (T-005 chiuso) |
 | T-009 | done | bigspec uniformi, zona A; screenshot schede |
 | T-010 | done | hex rimossi dai TSX, serie da token, dash + alone tacca SRM |
-| T-011 | in-progress | QA fatto (2 fix); **deploy da autorizzare al CEO** |
+| T-011 | done | QA fatto, deploy `edubeer-p5pbfljcg` Ready, bundle live identico al locale |
 | T-012 | done | DESIGN.md v2, README, skill, PROGETTI, costs |
 | T-013 | done | Archivo 34.9 KB OFL, revertibile in un commit |
 
 Verifica: `npm run build` e `npm test` (109 test, inclusa la guardia di contrasto)
-verdi. Nessun deploy eseguito. Baseline pre-restyle archiviata in
+verdi. Deploy eseguito il 2026-10-24 con OK del CEO. Baseline pre-restyle archiviata in
 `/tmp/edubeer-shots/before-*.png` (fuori repo).
 
 ## Post-epic — T-014 (2026-10-24)

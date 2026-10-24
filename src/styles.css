@@ -558,6 +558,7 @@ em { font-style: normal; }
 .select.inline { width: auto; }
 
 .dot {
+  /* Cerchio geometrico: non è un raggio della scala (eccezione voluta). */
   display: inline-block; width: 10px; height: 10px; border-radius: 50%;
   border: var(--bw-1) solid var(--border);
   flex: none;

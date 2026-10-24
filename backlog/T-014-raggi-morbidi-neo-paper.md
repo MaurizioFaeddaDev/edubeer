@@ -20,7 +20,7 @@ senza perdere bordi inchiostro e ombre dure che danno carattere.
 - [x] Contenitori (card, filter-block, bigspec, chart-card) a `--radius`
 - [x] Comandi (nav, input, select, mini, note, fact) a `--radius-sm`
 - [x] Chip, badge, contatori e scrollbar a `--radius-pill`
-- [x] Popover, empty state e tooltip a `--radius-lg`
+- [x] Popover ed empty state a `--radius-lg`; tooltip piccoli a `--radius-sm`
 - [x] Micro-tag (codice BJCP, cat-id, kbd, swatch SRM, thumb slider) a `--radius-xs`
 - [x] Ombre dure e bordi 2px invariati; contrasto AA invariato (test verdi)
 - [x] `npm run build` e `npm test` verdi

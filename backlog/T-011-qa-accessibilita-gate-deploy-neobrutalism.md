@@ -2,7 +2,7 @@
 
 - **id**: T-011
 - **tipo**: chore / quality
-- **stato**: in-progress
+- **stato**: done
 - **priorità**: P0 (finale, tiene il deploy)
 - **complessità**: S
 - **dipendenze**: T-006, T-007, T-008, T-009, T-010 (si verifica l'epic completo)
@@ -39,3 +39,8 @@ accessibilità e QA visuale dell'intero restyle, così che il tema chiaro
 
 - 2026-10-24 — aperto su decisione CEO; gate finale dell'epic. PM materializza.
 - 2026-10-24 — QA eseguito: 2 punti corretti (nav 44px, bigspec) + critico BeerGlass del reviewer; build+test verdi, screenshot matrice. Resta il deploy con OK del CEO.
+- 2026-10-24 — **done**. CEO ha autorizzato il push. Deploy Git automatico
+  `edubeer-p5pbfljcg` (Production, Ready). Prova: JS live `index-CMLnYyV_.js`
+  con sha256 `6c3ac82dbf2c56bd…` **identico** al build locale; CSS
+  `index-BoHCGwKm.css` identico; font `archivo-latin-E0tuGl4L.woff2` servito
+  (200, 34.928 B); screenshot live `/tmp/edubeer-shots/live-home.png`.
