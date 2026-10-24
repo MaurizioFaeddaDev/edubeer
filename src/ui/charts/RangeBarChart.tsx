@@ -128,7 +128,7 @@ export function RangeBarChart({
                   <g>
                     <rect
                       className="chart-bar"
-                      x={minX} y={cy - 6} width={Math.max(2, maxX - minX)} height={12}
+                      x={minX} y={cy - 6} width={Math.max(2, maxX - minX)} height={12} rx={2}
                       style={{ fill: isSrm ? `url(#rg-${uid}-${safeId(style.id)})` : color }}
                     />
                     <circle className="chart-dot" cx={minX} cy={cy} r={3} style={{ fill: isSrm ? srmToHex(pair[0]) : color }} />

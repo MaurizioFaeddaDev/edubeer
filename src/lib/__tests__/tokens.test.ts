@@ -50,7 +50,7 @@ describe('tokens — contratto semantico', () => {
       'accent', 'accent-2', 'accent-3', 'accent-4', 'positive', 'danger',
       'accent-ink', 'accent-2-ink', 'accent-3-ink', 'accent-4-ink', 'positive-ink', 'danger-ink',
       'series-1', 'series-2', 'series-3', 'series-4', 'series-5',
-      'bw-2', 'shadow-hard', 'radius', 'font-display', 'fs-display',
+      'bw-2', 'shadow-hard', 'radius', 'radius-xs', 'radius-sm', 'radius-lg', 'radius-pill', 'font-display', 'fs-display',
     ]) {
       expect(T.has(name), `token --${name} mancante`).toBe(true);
     }

@@ -72,8 +72,9 @@ domanda: non «che stile è?» ma «cosa devo sapere su questa bottiglia?».
 ## Identità visiva
 
 Il tema è **neo-paper**: fondo carta `#f5eedc` con trama millimetrata al 6%,
-inchiostro `#191613`, bordi 2px, ombre dure offset senza blur, spigoli 0, un solo
-accento giallo per l'azione. I testi lunghi (BJCP verbatim compreso) stanno su
+inchiostro `#191613`, bordi 2px, ombre dure offset senza blur, angoli arrotondati
+(14px sui contenitori, 8px sui comandi, pill su chip e badge), un solo accento
+giallo per l'azione. I testi lunghi (BJCP verbatim compreso) stanno su
 superfici calme, senza bordi né ombre; lo stile si scatena solo sui contenitori.
 
 - **Token**: `src/tokens.css` è **generato** da `~/Projects/maistru-craft/design-system/tokens.css`
