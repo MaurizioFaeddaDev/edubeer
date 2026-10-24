@@ -95,3 +95,9 @@ revoca + cosa NON fatto).
 Verifica: `npm run build` e `npm test` (109 test, inclusa la guardia di contrasto)
 verdi. Nessun deploy eseguito. Baseline pre-restyle archiviata in
 `/tmp/edubeer-shots/before-*.png` (fuori repo).
+
+## Post-epic — T-014 (2026-10-24)
+
+Iterazione richiesta dal CEO: il tema neo-paper si ammorbidisce con una scala di
+raggi (`--radius-xs/sm/-lg/pill`), senza toccare bordi inchiostro, ombre dure,
+zone A/B o contrasti. Ticket: `T-014-raggi-morbidi-neo-paper.md` (done).

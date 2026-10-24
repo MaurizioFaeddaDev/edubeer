@@ -12,6 +12,8 @@ Indice del backlog. Stato e dettagli vivono nei file dei ticket (conventions/BAC
 | [T-011](T-011-qa-accessibilita-gate-deploy-neobrutalism.md) | QA accessibilità + gate deploy epic | chore / quality | in-progress | P0 (finale) | S |
 | [T-012](T-012-documentazione-restyle-neobrutalism.md) | Documentazione restyle (README, skill, DESIGN.md v2, PROGETTI.md) | docs | done | P2 | S |
 | [T-013](T-013-font-archivo-variable-selfhosted.md) | Font display Archivo Variable OFL self-hosted | feat | done | P2 | S |
+| [T-014](T-014-raggi-morbidi-neo-paper.md) | Ammorbidire il tema: scala di raggi | feat / design | done | P1 | S |
+| [T-015](T-015-toggle-filtri-mobile.md) | Mobile: posizione del toggle «Filtri» | design / ux | open | P3 | S |
 | [T-003](T-003-test-automatici-lib.md) | Test automatici su `src/lib/` (vitest) | chore | open | P0 | S/M |
 | [T-002](T-002-export-csv-selezioni.md) | Export CSV delle selezioni filtrate | feat | done | P1 | M |
 | [T-001](T-001-traduzione-italiana-bjcp.md) | Traduzione italiana dei testi BJCP | feat | open | P2 | L |
@@ -41,6 +43,7 @@ T-006 (fondazione token + shell)
 - **T-007/T-008/T-009** parallelizzabili: tocchano sezioni diverse, stesso set di token.
 - **T-005 è wontfix** (assorbito da T-008 — gli AC passano lì, inclusa l'eliminazione
   di `.mini-tap`); nessun lavoro separato sulla famiglia `.mini`.
+- **T-014** è l'iterazione post-epic: raggi morbidi, nessun cambio di identità.
 - **T-011** è il gate: nessun deploy senza matrice screenshot, contrasti calcolati,
   keyboard/focus e OK del CEO.
 - **T-012** chiude l'epic documentando anche cosa NON è fatto; **T-013** è opzionale
