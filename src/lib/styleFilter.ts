@@ -1,3 +1,4 @@
+import { parseRange } from './range';
 import { BJCP_STYLES } from '../data/bjcp';
 import type { BjcpStyle } from '../data/bjcp';
 import { ABV_RANGE, IBU_RANGE, SRM_RANGE } from './catalog';
@@ -113,7 +114,15 @@ export function searchStyles(q: StyleQuery): BjcpStyle[] {
 export function suggestStyles(text: string, limit = 5): BjcpStyle[] {
   const t = text.trim();
   if (!t) return [];
-  return searchStyles({ ...EMPTY_STYLE_QUERY, text: t }).slice(0, limit);
+  const term = strip(t);
+  const rank = (s: BjcpStyle) => {
+    const name = strip(s.name);
+    if (strip(s.id) === term || name === term) return 0;
+    if (name.startsWith(term)) return 1;
+    if (name.includes(term)) return 2;
+    return 3;
+  };
+  return searchStyles({ ...EMPTY_STYLE_QUERY, text: t }).sort((a, b) => rank(a) - rank(b)).slice(0, limit);
 }
 
 export function countStyleFilters(q: StyleQuery): number {
@@ -128,13 +137,6 @@ export function countStyleFilters(q: StyleQuery): number {
 // ── Serializzazione nell'URL ────────────────────────────────────────────────
 
 const numInRange = (r: NumRange, g: NumRange) => r.min > g.min || r.max < g.max;
-
-const numPair = (raw: string | null, fallback: NumRange): NumRange => {
-  if (!raw) return { ...fallback };
-  const [a, b] = raw.split('-');
-  const num = (s: string, f: number) => (s != null && s.trim() !== '' && Number.isFinite(Number(s)) ? Number(s) : f);
-  return { min: num(a, fallback.min), max: num(b, fallback.max) };
-};
 
 export function toStyleSearch(q: StyleQuery): string {
   const p = new URLSearchParams();
@@ -157,9 +159,9 @@ export function fromStyleSearch(search: string): StyleQuery {
     text: p.get('q') ?? '',
     categories: pipe('cat'),
     families: pipe('fam'),
-    abv: numPair(p.get('abv'), ABV_RANGE),
-    ibu: numPair(p.get('ibu'), IBU_RANGE),
-    srm: numPair(p.get('srm'), SRM_RANGE),
+    abv: parseRange(p.get('abv'), ABV_RANGE),
+    ibu: parseRange(p.get('ibu'), IBU_RANGE),
+    srm: parseRange(p.get('srm'), SRM_RANGE),
     sort: STYLE_SORTS.some((s) => s.id === sort) ? (sort as StyleSort) : 'code',
   };
 }

@@ -1,226 +1,123 @@
 # EduBeer
 
-Enciclopedia consultabile delle birre. Il catalogo segue il **documento ufficiale BJCP
-2021**: **116 stili** (107 numerati + 9 storici della categoria 27) in 34 categorie, e le
-**613 birre commerciali** che il BJCP cita come esempi di quegli stili. Il **focus è sugli
-stili** — la guida ai 116 stili è l'homepage e ha filtri propri — mentre le birre
-citate stanno in un catalogo a parte. In più, una sezione **Confronta** che mette fianco a
-fianco da 2 a 5 stili su tutti i numeri dichiarati (ABV, IBU, colore, OG, FG), e una sezione
-separata di **Approfondimenti** con 30 birre che hanno una scheda scritta a mano — storia,
-origine, abbinamento gastronomico, nota da esperto.
+Atlante consultabile della birra, per appassionati curiosi e degustatori. **116 stili BJCP 2021, 613 birre citate come esempi e 30 approfondimenti curati.**
 
-La **ricerca sta in navbar** e vale per tutta l'app: mentre scrivi filtra la lista che hai
-davanti (birre o stili) e apre un elenco di scorciatoie raggruppate da cui saltare a una
-scheda; Invio cerca la parola nel catalogo delle birre.
+## Avvio
 
-Niente assi sensoriali, niente punteggi, niente sblocchi: qui si consulta.
-
-L'interfaccia parla **neubrutalism disciplinato**, tema chiaro “neo-paper”: carta,
-inchiostro, bordi netti, ombre dure. Lo stile vive sui contenitori e sui comandi;
-i testi BJCP lunghi restano su superfici calme e leggibili (dottrina delle zone in
-`design-system/DESIGN.md`, repo maistru-craft).
-
-```bash
-npm install
-npm run dev          # http://localhost:5173
-npm run build        # bundle statico in dist/ — nessuna dipendenza runtime oltre a React
-npm test             # vitest run — logica pura di src/lib/ + contrasto dei token
-npm run sync-tokens  # riallinea src/tokens.css dalla fonte aziendale
+```sh
+npm ci
+npm run dev
+npm run build
+npm test
+npm run preview
 ```
 
----
+React 19, TypeScript e Vite. Hosting statico; nessun backend o account necessario. I dati e i font sono locali: nessun servizio esterno richiesto durante la consultazione.
 
-## Le sezioni
+## Consultazione
 
-### 1. Stili
+- **Stili:** elenco per categoria ufficiale, ricerca globale, filtri per famiglia, categoria e intervalli, ordinamento e CSV. Su desktop un'anteprima affiancata consente di esplorare senza perdere l'elenco; su telefono i nomi aprono direttamente la scheda.
+- **Scheda stile:** sintesi italiana, numeri, scala colore, testo ufficiale in inglese, dati per degustatori, birre citate e approfondimenti collegati.
+- **Confronta:** da 2 a 5 stili, aggiungibili dalla guida, dalla scheda o dalla ricerca interna. Intervalli ABV/IBU/SRM su scale comuni, valori esatti, tabella con OG/FG e radar secondario ripiegabile. La selezione è salvata in localStorage.
+- **Birre:** esempi commerciali citati dal BJCP, con filtri, ricerca, ordinamento e CSV.
+- **Approfondimenti:** 30 schede con storia, origine, abbinamento e nota di degustazione, ricercabili per nome, stile e provenienza.
 
-I 116 stili BJCP 2021, raggruppati per categoria ufficiale, con i dati vitali (ABV, IBU, OG,
-FG, SRM) e una rilettura italiana. Si filtrano per famiglia
-(Lager / Ale / Trappista / Fermentazione spontanea / Speciale), categoria e intervallo di
-gradazione, amarezza o colore, con gli stessi ordinamenti del catalogo; con un ordinamento
-diverso da «Codice BJCP» la guida passa a un'unica griglia, così il criterio resta visibile.
-Da ogni stile si arriva alle birre che il BJCP cita per esso e agli approfondimenti collegati.
+La ricerca globale suggerisce stili e birre. Frecce e Invio selezionano un suggerimento; Invio senza selezione cerca nel catalogo birre. Escape chiude i suggerimenti. Il tasto `/` porta alla ricerca quando non si sta già scrivendo in un campo.
 
-### 2. Confronta
+## Fonti e limiti dei dati
 
-Da 2 a 5 stili messi fianco a fianco. Un radar a cinque assi (ABV, IBU, SRM, OG, FG)
-dà la forma complessiva, tre grafici a barre orizzontali mostrano l'intervallo
-[min–max] di ABV, IBU e colore (con la tinta SRM reale), e una tabella riporta i
-numeri esatti. Gli stili si aggiungono dalle card della sezione Stili con «＋ Confronta»;
-la selezione vive in `localStorage` e sopravvive alla navigazione.
+Il BJCP descrive gli **stili**, non le singole birre commerciali: ABV, IBU, SRM, OG e FG sono intervalli di stile. Le liste e le schede dichiarano questa distinzione. I filtri numerici mostrano le birre il cui stile interseca l'intervallo richiesto.
 
-### 3. Birre
+Gli approfondimenti sono un corpus editoriale separato. I valori importati sono indicati come **da verificare** finché non sono disponibili fonte puntuale, variante e data di verifica. `src/lib/provenance.ts` conserva questa provenienza senza modificare i dataset generati. I colori SRM sono informazioni di colore, non punteggi. La tacca di un grafico indica il punto medio matematico dell'intervallo, non una misura della birra. Un valore mancante resta non dichiarato; i bicchieri senza dato SRM sono vuoti. La forma del bicchiere è illustrativa.
 
-Tutte le birre citate dal BJCP 2021. La ricerca testuale è in navbar; qui restano i filtri
-per categoria, famiglia, stile e intervallo di gradazione, amarezza o colore.
+Gli stili e le birre citate sono generati dal documento ufficiale BJCP 2021:
 
-Il punto delicato: **il BJCP non descrive le singole birre**. Di «Pilsner Urquell» il BJCP
-dice solo che è un esempio dello stile *3B Czech Premium Pale Lager*. Non ne dichiara ABV,
-IBU, né profilo. Quindi ogni scheda mostra i numeri e i testi **dello stile**, e lo dichiara
-in chiaro: nessun dato per-birra viene inventato. Un filtro «ABV ≥ 8%» mostra le birre il cui
-stile *tocca* quella gradazione, non le birre che hanno davvero 8 gradi.
+```sh
+python scripts/gen-bjcp-docx.py percorso/2021_Guidelines_Beer_1.25.docx
+```
 
-### 4. Approfondimenti
+Le sintesi italiane sono in `scripts/bjcp_blurbs.py`. I testi ufficiali in `src/data/bjcp.ts` restano verbatim in inglese. Non modificare manualmente i dataset generati.
 
-Le uniche 30 birre con dati verificati **birra per birra**: storia reale e datata, origine,
-abbinamento gastronomico, nota da esperto. Sono il corpus che EduBeer condivide con il gioco
-BIRRAMON — Rosso Malto, tenuto qui in una sezione separata proprio perché risponde a un'altra
-domanda: non «che stile è?» ma «cosa devo sapere su questa bottiglia?».
+Gli approfondimenti sono sincronizzabili dal progetto BIRRAMON:
 
----
+```sh
+npm run sync-data
+node scripts/sync-data.mjs percorso/birramon
+```
 
 ## Identità visiva
 
-Il tema è **neo-paper**: fondo carta `#f5eedc` con trama millimetrata al 6%,
-inchiostro `#191613`, bordi 2px, ombre dure offset senza blur, angoli arrotondati
-(14px sui contenitori, 8px sui comandi, pill su chip e badge), un solo accento
-giallo per l'azione. I testi lunghi (BJCP verbatim compreso) stanno su
-superfici calme, senza bordi né ombre; lo stile si scatena solo sui contenitori.
+Atlante da esplorare con confronto da degustazione: porcellana, testo bruno, accento petrolio, Source Serif 4 per i titoli e Source Sans 3 per la consultazione. Bicchieri SVG e scale SRM collegano l'identità al contenuto.
 
-- **Token**: `src/tokens.css` è **generato** da `~/Projects/maistru-craft/design-system/tokens.css`
-  (`npm run sync-tokens`). Nessun colore hardcoded: le uniche eccezioni sono
-  `--foam` (bicchiere SVG), `--caret` (data-URI) e il `meta theme-color`.
-- **Contrasto**: `src/lib/__tests__/tokens.test.ts` calcola i rapporti WCAG dei
-  token e fallisce se una coppia testo/sfondo scende sotto 4.5:1 (3:1 per i confini).
-- **Font**: Archivo Variable self-hosted (`src/assets/archivo-latin.woff2`, OFL,
-  35 KB) solo per i display; il testo resta system-ui. È un asset, non una
-  dipendenza runtime.
-- **Colore semantico locale**: la striscia sinistra delle card dice la famiglia
-  BJCP — Lager blu, Ale giallo, Trappista viola, Spontanea rosa, Speciale verde.
-- **Grafici**: SVG scritti a mano; i colori delle serie vengono dai token
-  `--series-1..5` e il tratteggio distingue le serie senza affidarsi al colore.
-  I colori SRM delle birre restano **dato** e non vengono tematizzati.
+`src/tokens.css` è la fonte locale autonoma. La precedente sincronizzazione dei token da maistru-craft è stata rimossa per impedire sovrascritture del tema. `DESIGN.md` descrive il sistema finale; `PRODUCT.md` registra pubblico e vincoli del prodotto. Font WOFF2 latini self-hosted; licenze OFL incluse in `src/assets/`.
 
----
+## URL
 
-**Stili e birre BJCP** (`src/data/bjcp.ts`, `src/data/bjcp-beers.ts`) sono generati dal
-**documento ufficiale** `2021_Guidelines_Beer_1.25.docx`:
-
-```bash
-python3 scripts/gen-bjcp-docx.py [percorso.docx]
+```text
+#/                            guida agli stili
+#/?fam=Lager                  guida filtrata e condivisibile
+#/stili                       alias della guida
+#/stili/3B                    scheda dello stile
+#/stili/27-kellerbier          stile storico
+#/birre?q=pilsner              catalogo filtrato
+#/birre?stile=3B               birre citate per lo stile
+#/b/pilsner-urquell            scheda birra (ID del corpus)
+#/confronta                    selezione locale persistente
+#/confronta?stili=3B,5D         confronto condiviso (prevale sulla selezione locale)
+#/approfondimenti?q=dupont     approfondimenti con ricerca condivisibile
+#/a/saison              approfondimento (ID del corpus)
 ```
 
-Perché il `.docx` e non un JSON di terze parti: il primo dataset usato
-(`hopalyzer/bjcp-2021.json`) si è rivelato **incompleto** — mancavano la categoria 27
-(9 stili storici) e la 33 (Wood Beer, 2 stili), e alcuni nomi erano sbagliati. Il documento
-ufficiale è la fonte di verità; il parser legge un campo per paragrafo.
-
-I blurb in italiano degli stili sono scritti a mano in `scripts/bjcp_blurbs.py` (chiave =
-codice ufficiale o, per gli stili storici non numerati, il nome). I testi ufficiali (aroma,
-aspetto, sapore, corpo, commenti, storia, confronto, ingredienti) sono riportati **verbatim in
-inglese**, perché è il documento con cui i giudici valutano.
-
-**Gli approfondimenti** (30 birre) sono sincronizzati dal gioco BIRRAMON:
-
-```bash
-npm run sync-data                          # cerca ../birramon
-node scripts/sync-data.mjs ~/Progetti/birramon
-```
-
-Lo script copia `types.ts`, `styles.ts`, `beers.ts` e scrive `src/data/source.json` con
-percorso e data dell'ultima sincronizzazione.
-
----
+Gli ID delle birre e degli approfondimenti derivano dal corpus. I filtri cambiano l'URL senza aggiungere una voce di cronologia per ogni modifica. Gli URL malformati hanno una pagina di recupero.
 
 ## Struttura
 
-```
-src/
-  data/
-    types.ts         modello di dominio (specie, stili, profili)   ← da birramon
-    styles.ts        i 27 stili dell'archivio degli approfondimenti ← da birramon
-    beers.ts         le 30 birre con storia, origine, abbinamento   ← da birramon
-    source.json      manifesto della sincronizzazione               ← da birramon
-    bjcp.ts          i 116 stili BJCP 2021, testi e dati vitali     ← dal docx ufficiale
-    bjcp-beers.ts    le 613 birre citate dal BJCP                   ← dal docx ufficiale
-  tokens.css         design token aziendali                       ← da maistru-craft
-  assets/            Archivo Variable (OFL) + licenza               ← self-hosted
-  lib/
-    catalog.ts       enciclopedia BJCP: filtri, ricerca, ordinamenti, URL
-    styleFilter.ts   filtri della guida agli stili: query, ordinamenti, URL
-    csv.ts           export CSV delle selezioni: escaping RFC 4180, numeri it-IT, zero dipendenze
-    compare.ts       carrello del confronto (2–5 stili) e metriche, persistito
-    beer.ts          derivate degli approfondimenti
-    color.ts         SRM → colore
-  ui/
-    BeerGlass.tsx    bicchiere SVG riempito col colore SRM reale
-    SearchBar.tsx       ricerca globale in navbar, con suggerimenti raggruppati
-    CatalogFilters.tsx  pannello filtri del catalogo (e filtri attivi condivisi)
-    CatalogView.tsx     griglia delle birre BJCP
-    BeerPage.tsx        scheda di una birra BJCP (testi dello stile)
-    StyleFilters.tsx    pannello filtri della guida agli stili
-    StyleGuide.tsx      i 116 stili, per categoria (con «＋ Confronta» su ogni card)
-    ExportCsvButton.tsx button «Esporta CSV»: blob + download, nessuna navigazione
-    CompareView.tsx     sezione Confronta: radar, barre [min–max], tabella
-    DeepDives.tsx       elenco e scheda degli approfondimenti
-    charts/             SVG custom: RangeBarChart, RadarChart, useSize (nessuna dipendenza)
-  App.tsx            router su hash
-scripts/
-  gen-bjcp-docx.py       genera bjcp.ts e bjcp-beers.ts dal docx BJCP
-  bjcp_blurbs.py         i blurb italiani degli stili (scritti a mano)
-  sync-data.mjs          sincronizza gli approfondimenti da birramon
-  sync-tokens.mjs        sincronizza src/tokens.css da maistru-craft
+```text
+src/App.tsx                   shell, navigazione e stato delle query
+src/lib/routes.ts             parsing e link delle route
+src/lib/catalog.ts            catalogo e filtri birre
+src/lib/styleFilter.ts        ricerca e filtri stili
+src/lib/compare.ts            selezione, ordinamenti e metriche
+src/lib/csv.ts                esportazione CSV
+src/lib/__tests__/            test di dominio, route e contrasto
+src/ui/StyleGuide.tsx          elenco e anteprima
+src/ui/StylePage.tsx           scheda stile
+src/ui/StyleElements.tsx       numeri, scala SRM e selezione confronto
+src/ui/CompareView.tsx         confronto e ricerca interna
+src/ui/charts/                intervalli e radar
+src/ui/                       catalogo, schede, ricerca e filtri
+src/data/                     dataset e provenienza
+src/styles.css                layout, componenti e responsive
+src/tokens.css                token autonomi
 ```
 
-Nessun backend: tutto il corpus è compilato nel bundle, quindi il sito è un insieme di file
-statici servibili da qualsiasi parte.
+## Verifica
 
-### Router
+`npm test` verifica filtri, ricerca, CSV, confronto, colori, route condivisibili e contrasto del tema. `npm run build` esegue TypeScript e produce `dist/`, con dati BJCP e dipendenze separati per caching.
 
+Il refactor è verificato anche in Chrome headless: guida, schede, ricerca da tastiera, filtri e ricarica URL, CSV, confronto e limite di cinque stili, percorsi tra stili/birre/approfondimenti, stati vuoti e indirizzi malformati. Controlli responsive a 1440, 1024, 390 e 320 px. Evidenze locali non versionate in `.impeccable/review/`.
+
+La configurazione di deploy statico è in `vercel.json`. Il refactor non pubblica automaticamente il sito.
+
+
+## Verifica dell'audit
+
+```sh
+npm ci
+npx playwright install chromium
+npm test
+npm run test:e2e
+npm run test:perf
 ```
-#/                                  i 116 stili BJCP (homepage)
-#/?fam=Lager&abv=8-14               guida agli stili filtrata
-#/birre                             catalogo delle birre
-#/birre?q=stout&stile=15B&abv=8-14  catalogo filtrato
-#/b/pilsner-urquell                 scheda di una birra BJCP
-#/confronta                         confronto fra 2–5 stili
-#/approfondimenti                   le 30 schede curate
-#/a/saison-dupont                   scheda di approfondimento
-```
 
-Gli stili storici non hanno un codice a lettera nel documento BJCP (sono «27. Historical
-Beer: Kellerbier»): nel data model hanno un `id` univoco (`27-kellerbier`) e il codice
-mostrato resta `27`.
+Playwright è una dipendenza di sviluppo versionata. I test E2E avviano una preview della build, verificano regressioni, condivisione e sincronizzazione fra schede, accessibilità da tastiera e layout da 320 a 1440 px. In alternativa al Chromium scaricato, impostare `PLAYWRIGHT_CHANNEL=chrome` per un Chrome già installato. In PowerShell: `$env:PLAYWRIGHT_CHANNEL='chrome'`.
 
----
+`npm run test:perf` misura digitazione e DOM con CPU rallentata 6× e viewport 390×844. È una diagnosi riproducibile, non un punteggio INP reale. Report e trace sono in `playwright-report/` e `test-results/` (non versionati). La CI esegue unit test, build ed E2E.
 
-## Deploy
+I filtri numerici da URL sono limitati al dominio e riordinati quando invertiti. Il colore interseca l'intervallo SRM di stile, su un dominio completo 1–40. Le categorie attive sono rimovibili dal riepilogo; il filtro stili è ricercabile per nome e codice.
 
-Su Vercel, progetto dedicato, dominio di produzione <https://edubeer.com>. Il progetto
-nasce da quello che ospitava Hopalyzer: il source è stato ripuntato su questo repo e il
-preset è tornato **Vite**. Questo è il motivo per cui `vercel.json` esiste ed è esplicito —
-`framework: "vite"`, `outputDirectory: "dist"` — invece di affidarsi all'auto-detection,
-che sul progetto ereditava il preset Next.js.
+Il ritorno alle liste conserva query e posizione durante la navigazione nella stessa sessione dell'app. Il cambio pagina porta il focus al contenuto. Il confronto si sincronizza fra schede aperte; un link condiviso importa una fotografia degli ID, validati e deduplicati (massimo cinque). Il link generato dal pannello Condividi riflette sempre la selezione corrente.
 
-Il routing è su **hash** (`#/birre`, `#/confronta`), quindi il sito è un singolo
-`index.html` con asset: **nessun rewrite SPA** è necessario né configurato.
+Le definizioni di ABV, IBU, SRM, OG e FG sono disponibili accanto ai numeri. Le relazioni fra approfondimenti e BJCP sono esplicitamente presentate come stili correlati, senza scegliere arbitrariamente un unico codice.
 
----
-
-## Stato e prossimi passi
-
-**Fatto:** guida ai 116 stili in 34 categorie come homepage, con ricerca in navbar
-e filtri per famiglia, categoria e intervalli ABV/IBU/SRM; catalogo di 613 birre BJCP con
-filtri per categoria, famiglia, stile e intervalli ABV/IBU/SRM, ordinamenti e URL condivisibili;
-scheda birra con i testi ufficiali dello stile; ricerca globale in navbar con suggerimenti
-gruppati (stili e birre); sezione Confronta (2–5 stili) con radar, grafici a barre [min–max] e
-tabella riepilogativa, tutta in SVG custom senza nuove dipendenze; sezione Approfondimenti con
-30 schede scritte a mano; layout mobile con filtri richiudibili e target touch da 44px;
-**export CSV delle selezioni filtrate** di birre e stili (stesse righe della griglia, BOM UTF-8
-e separatore «;» coi numeri alla virgola, apribile in Excel/LibreOffice italiani) senza
-dipendenze aggiuntive; **suite vitest (`npm test`) sulla logica pura di `src/lib/`** — catalogo,
-filtro stili, confronto, colore, BeerDex e contrasto dei token — con i conteggi sacri (116 stili,
-613 birre, 30 approfondimenti) come guardia anti-regressione; **restyle completo neo-paper**
-(ticket T-006..T-013): token semantici sincronizzati dall'azienda, shell, catalogo, filtri,
-schede, confronto e grafici sul nuovo tema, con card codificate per famiglia BJCP.
-
-**Non fatto:**
-
-- I testi ufficiali BJCP nella scheda sono in inglese: una traduzione italiana sarebbe il
-  prossimo miglioramento di sostanza, ma sono centinaia di sezioni.
-- Nessuna indicazione di *quanto* una birra reale si discosti dallo stile: il BJCP non lo
-  dice, e non si inventa.
-- Il bundle supera i 500 KB raw (testi BJCP): si può ridurre caricando le sezioni estese
-  solo nella scheda (code-splitting).
-- Il restyle non è ancora deployato: attende il gate QA e l'OK del CEO. slow-opinions resta
-  sul tema precedente in deroga transitoria; nessun dark mode parallelo.
+Il catalogo mostra 60 birre alla volta. «Mostra altre» aggiunge il gruppo successivo e porta il focus alla prima nuova voce; tornando dalla scheda resta visibile quanto già caricato. Ricerca, conteggi e CSV riguardano sempre tutte le birre corrispondenti.

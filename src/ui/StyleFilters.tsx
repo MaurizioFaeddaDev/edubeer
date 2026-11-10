@@ -1,3 +1,4 @@
+import { MetricGlossary } from './MetricGlossary';
 import { CATEGORIES, FAMILIES, STYLES } from '../lib/catalog';
 import {
   EMPTY_STYLE_QUERY, STYLE_SORTS, countStyleFilters,
@@ -65,6 +66,7 @@ export function StyleFilters({
             <button
               key={f}
               className={`chip ${query.families.includes(f) ? 'on' : ''}`}
+              aria-pressed={query.families.includes(f)}
               onClick={() => toggle('families', f)}
             >
               {f}
@@ -114,6 +116,7 @@ export function StyleFilters({
         />
       </div>
 
+      <MetricGlossary />
       {active > 0 && (
         <div className="filter-block">
           <h3 className="filter-title">Filtri attivi <span className="badge">{active}</span></h3>
@@ -134,6 +137,9 @@ export function ActiveStyleFilters({
   const items: { label: string; clear: () => void }[] = [];
   if (query.text.trim()) {
     items.push({ label: `«${query.text.trim()}»`, clear: () => onChange({ ...query, text: '' }) });
+  }
+  for (const category of query.categories) {
+    items.push({ label: category, clear: () => onChange({ ...query, categories: query.categories.filter(c => c !== category) }) });
   }
   for (const f of query.families) {
     items.push({ label: f, clear: () => onChange({ ...query, families: query.families.filter((x) => x !== f) }) });

@@ -1,3 +1,4 @@
+import { MetricGlossary } from './MetricGlossary';
 import { CATEGORIES, FAMILIES, STYLES, SORTS, EMPTY_CATALOG, countActiveFilters } from '../lib/catalog';
 import type { CatalogQuery, NumRange } from '../lib/catalog';
 import { MultiSelect } from './MultiSelect';
@@ -61,6 +62,7 @@ export function CatalogFilters({
             <button
               key={f}
               className={`chip ${query.families.includes(f) ? 'on' : ''}`}
+              aria-pressed={query.families.includes(f)}
               onClick={() => toggle('families', f)}
             >
               {f}
@@ -89,18 +91,9 @@ export function CatalogFilters({
           Stile
           {query.styles.length > 0 && <span className="badge">{query.styles.length}</span>}
         </h3>
-        <div className="chips scroll">
-          {STYLES.map((s) => (
-            <button
-              key={s.id}
-              className={`chip ${query.styles.includes(s.id) ? 'on' : ''}`}
-              onClick={() => toggle('styles', s.id)}
-              title={`${s.code} ${s.name}`}
-            >
-              {s.name}
-            </button>
-          ))}
-        </div>
+        <MultiSelect label="stili" placeholder="Tutti gli stili" searchPlaceholder="Cerca nome o codice BJCP…"
+          options={STYLES.map(s => ({ value: s.id, label: `${s.code} · ${s.name}` }))}
+          selected={query.styles} onChange={styles => onChange({ ...query, styles })} />
       </div>
 
       <div className="filter-block">
@@ -129,6 +122,7 @@ export function CatalogFilters({
         />
       </div>
 
+      <MetricGlossary />
       {active > 0 && (
         <div className="filter-block">
           <h3 className="filter-title">Filtri attivi <span className="badge">{active}</span></h3>
@@ -205,6 +199,9 @@ export function ActiveCatalogFilters({
   const items: { label: string; clear: () => void }[] = [];
   if (query.text.trim()) {
     items.push({ label: `«${query.text.trim()}»`, clear: () => onChange({ ...query, text: '' }) });
+  }
+  for (const category of query.categories) {
+    items.push({ label: category, clear: () => onChange({ ...query, categories: query.categories.filter(c => c !== category) }) });
   }
   for (const f of query.families) {
     items.push({ label: f, clear: () => onChange({ ...query, families: query.families.filter((x) => x !== f) }) });

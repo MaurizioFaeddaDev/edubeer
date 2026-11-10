@@ -36,12 +36,13 @@ export function MultiSelect({
   const [open, setOpen] = useState(false);
   const [term, setTerm] = useState('');
   const wrap = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
   const listId = useId();
 
   const filtered = useMemo(() => {
     const q = norm(term.trim());
     if (!q) return options;
-    return options.filter((o) => norm(o.search ?? o.label).includes(q));
+    return options.filter((o) => norm(`${o.label} ${o.search ?? ""}`).includes(q));
   }, [options, term]);
 
   // Chiudi cliccando fuori.
@@ -70,12 +71,15 @@ export function MultiSelect({
   );
 
   return (
-    <div className="ms" ref={wrap}>
+    <div className="ms" ref={wrap} onKeyDown={e => {
+      if (e.key === 'Escape' && open) { e.preventDefault(); setOpen(false); trigger.current?.focus(); }
+    }}>
       <button
         type="button"
+        ref={trigger}
         className={`ms-trigger ${open ? 'open' : ''}`}
+        aria-label={`${label}: ${selected.length ? selectedLabels.join(", ") : placeholder}`}
         aria-expanded={open}
-        aria-haspopup="listbox"
         aria-controls={listId}
         title={selected.length ? selectedLabels.join(' · ') : undefined}
         onClick={() => setOpen((v) => !v)}
@@ -95,12 +99,9 @@ export function MultiSelect({
               type="search"
               value={term}
               placeholder={searchPlaceholder}
-              aria-label={`Cerca tra le ${label}`}
+              aria-label={`Cerca ${label}`}
               autoFocus
               onChange={(e) => setTerm(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
-              }}
             />
           </div>
 
@@ -114,22 +115,18 @@ export function MultiSelect({
             <span className="ms-count dim">{filtered.length} su {options.length}</span>
           </div>
 
-          <div className="ms-list" id={listId} role="listbox" aria-multiselectable="true" aria-label={label}>
+          <div className="ms-list" id={listId} role="group" aria-label={label}>
             {filtered.map((o) => {
               const on = selected.includes(o.value);
               return (
-                <button
+                <label
                   key={o.value}
-                  type="button"
-                  role="option"
-                  aria-selected={on}
                   className={`ms-option ${on ? 'on' : ''}`}
-                  onClick={() => toggle(o.value)}
                 >
-                  <span className="ms-check" aria-hidden="true">{on ? '✓' : ''}</span>
+                  <input className="ms-check" type="checkbox" checked={on} onChange={() => toggle(o.value)} />
                   <span className="ms-label">{o.label}</span>
                   {o.count != null && <em className="ms-badge">{o.count}</em>}
-                </button>
+                </label>
               );
             })}
             {filtered.length === 0 && (

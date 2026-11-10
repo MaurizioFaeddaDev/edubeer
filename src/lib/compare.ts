@@ -23,18 +23,19 @@ export const styleColor = (index: number): string => STYLE_COLORS[index % STYLE_
 
 // ── Carrello ────────────────────────────────────────────────────────────────
 
+export function validCompareIds(value: unknown): string[] {
+  return Array.isArray(value) ? [...new Set(value.filter((x): x is string => typeof x === 'string' && BJCP_BY_ID.has(x)))].slice(0, MAX_COMPARE) : [];
+}
 function load(): string[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const arr: unknown = JSON.parse(raw);
-    if (!Array.isArray(arr)) return [];
-    return arr
-      .filter((x): x is string => typeof x === 'string' && BJCP_BY_ID.has(x))
-      .slice(0, MAX_COMPARE);
-  } catch {
-    return [];
-  }
+  try { return validCompareIds(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]')); }
+  catch { return []; }
+}
+export function compareHref(ids: string[]): string {
+  return `#/confronta?stili=${validCompareIds(ids).map(encodeURIComponent).join(',')}`;
+}
+export function applyCompareLink(search: string): void {
+  const params = new URLSearchParams(search);
+  if (params.has('stili')) commit(validCompareIds(params.get('stili')!.split(',')));
 }
 
 let selected: string[] = load();
@@ -44,6 +45,16 @@ function commit(next: string[]) {
   selected = next;
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(selected)); } catch { /* quota piena: si ignora */ }
   listeners.forEach((l) => l());
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', event => {
+    if (event.key !== STORAGE_KEY && event.key !== null) return;
+    const next = load();
+    if (JSON.stringify(next) === JSON.stringify(selected)) return;
+    selected = next;
+    listeners.forEach(listener => listener());
+  });
 }
 
 const store = {

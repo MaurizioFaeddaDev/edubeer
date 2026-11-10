@@ -1,3 +1,5 @@
+> Archivio storico: questa specifica visuale è superata dal sistema Atlante descritto in DESIGN.md (7 novembre 2026). Non applicarla a nuovi interventi.
+
 # Ticket T-008 — Filtri, input, chip e bottoni neubrutalism (+ assorbimento T-005)
 
 - **id**: T-008

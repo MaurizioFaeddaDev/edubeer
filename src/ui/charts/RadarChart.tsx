@@ -154,6 +154,7 @@ export function RadarChart({
               }}
               onPointerEnter={() => setHover(style.id)}
               onPointerLeave={() => setHover(null)}
+              aria-pressed={!off}
               title={off ? 'Mostra' : 'Nascondi'}
             >
               <i className="dot" style={{ background: color }} />
@@ -173,15 +174,17 @@ export function RadarChart({
       </div>
 
       <p className="radar-caption">
-        {hovered
-          ? (
-            <span>
-              <b>{hovered.name}</b>
+        {/* Shared grid cell reserves the tallest caption, preventing hover/scroll feedback. */}
+        <span aria-hidden={!!hovered} className={hovered ? undefined : 'active'}>
+          La linea unisce i punti medi degli intervalli; il trattino sull’asse indica il minimo e il massimo dichiarati. Le scale sono normalizzate sui domini indicati.
+        </span>
+        {styles.map(style => (
+            <span key={style.id} aria-hidden={hovered?.id !== style.id} className={hovered?.id === style.id ? 'active' : undefined}>
+              <b>{style.name}</b>
               {' — '}
-              {RADAR_METRICS.map((m) => `${m.short} ${pairLabel(m.pair(hovered), m.unit, m.digits)}`).join(' · ')}
+              {RADAR_METRICS.map((m) => `${m.short} ${pairLabel(m.pair(style), m.unit, m.digits)}`).join(' · ')}
             </span>
-          )
-          : 'La linea è il valore medio dello stile; il trattino sull\u2019asse è l\u2019intervallo [min–max] dichiarato dal BJCP. OG e FG compaiono solo qui, per dare cinque vertici al pentagono.'}
+          ))}
       </p>
     </div>
   );

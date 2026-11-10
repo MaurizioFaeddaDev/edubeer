@@ -6,3 +6,9 @@ dist
 __pycache__/
 .vercel
 .env*
+.impeccable/review/
+.impeccable/questions/
+.impeccable/hook.cache.json
+
+playwright-report/
+test-results/

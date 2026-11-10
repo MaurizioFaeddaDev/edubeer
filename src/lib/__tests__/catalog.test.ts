@@ -66,7 +66,7 @@ describe('catalog — insieme dei dati (fonti sacre)', () => {
   it('deriva gli intervalli globali dagli stili (ABV/IBU/SRM)', () => {
     expect(ABV_RANGE).toEqual({ min: 2, max: 14 });
     expect(IBU_RANGE).toEqual({ min: 0, max: 100 });
-    expect(SRM_RANGE).toEqual({ min: 2, max: 35 });
+    expect(SRM_RANGE).toEqual({ min: 1, max: 40 });
   });
 });
 
@@ -156,12 +156,12 @@ describe('catalog — matchesBeer', () => {
     expect(matchesBeer(beer, { ...EMPTY_CATALOG, ibu: { min: IBU_RANGE.min, max: lo - 1 } })).toBe(false);
   });
 
-  it('SRM: il valore puntuale dello stile è incluso ai bordi, fuori no', () => {
-    const srm = style.srm!;
-    expect(matchesBeer(beer, { ...EMPTY_CATALOG, srm: { min: srm, max: SRM_RANGE.max } })).toBe(true);
-    expect(matchesBeer(beer, { ...EMPTY_CATALOG, srm: { min: SRM_RANGE.min, max: srm } })).toBe(true);
-    expect(matchesBeer(beer, { ...EMPTY_CATALOG, srm: { min: srm + 1, max: SRM_RANGE.max } })).toBe(false);
-    expect(matchesBeer(beer, { ...EMPTY_CATALOG, srm: { min: SRM_RANGE.min, max: srm - 1 } })).toBe(false);
+  it('SRM: interseca gli estremi dell intervallo, non soltanto il punto medio', () => {
+    const [lo, hi] = style.color!;
+    expect(matchesBeer(beer, { ...EMPTY_CATALOG, srm: { min: hi, max: SRM_RANGE.max } })).toBe(true);
+    expect(matchesBeer(beer, { ...EMPTY_CATALOG, srm: { min: SRM_RANGE.min, max: lo } })).toBe(true);
+    expect(matchesBeer(beer, { ...EMPTY_CATALOG, srm: { min: hi + 1, max: SRM_RANGE.max } })).toBe(false);
+    expect(matchesBeer(beer, { ...EMPTY_CATALOG, srm: { min: SRM_RANGE.min, max: lo - 1 } })).toBe(false);
   });
 
   it('uno stile senza ABV dichiarato passa solo con l intervallo globale completo', () => {
@@ -173,7 +173,7 @@ describe('catalog — matchesBeer', () => {
   });
 
   it('uno stile senza SRM dichiarato passa solo con l intervallo globale completo', () => {
-    // Ramo `s.srm == null`: distinto da `overlaps` (qui il confronto è puntuale).
+    // Un intervallo mancante passa soltanto a filtro disattivato.
     const nullSrm = STYLES.find((s) => s.srm === null);
     expect(nullSrm).toBeDefined();
     const nullBeer: BjcpBeer = { id: 'ghost-srm', name: 'Ghost SRM', styleId: nullSrm!.id };

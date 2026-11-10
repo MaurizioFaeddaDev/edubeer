@@ -2,7 +2,7 @@
 
 - **id**: T-015
 - **tipo**: design / ux
-- **stato**: open
+- **stato**: superseded
 - **priorità**: P3
 - **complessità**: S
 - **dipendenze**: T-006 (shell), dottrina zone DESIGN.md §5
@@ -32,3 +32,6 @@ a leggere.
 
 - 2026-10-24 — aperto dall'orchestratore su segnalazione QA visuale (T-014),
   per non correggere in silenzio una decisione di design.
+
+## Esito — 7 novembre 2026
+Il refactor Atlante colloca Filtri dopo titolo e introduzione. L’audit riduce gli spazi iniziali su mobile e mantiene controlli di almeno 44 px. Questa precedente specifica è superata; verifiche in T-016.

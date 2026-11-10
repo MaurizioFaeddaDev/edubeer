@@ -1,6 +1,6 @@
 ---
 name: edubeer
-description: "Convenzioni del progetto edubeer (enciclopedia BJCP delle birre, https://edubeer.com) — usare per ogni lavoro su ~/Projects/edubeer: stack, fonti dati sacre, comandi di verification, lingua, mapping dei token maistru-craft."
+description: "Convenzioni di EduBeer: stack, fonti dati, verifica, lingua e identità autonoma dell'atlante."
 ---
 
 # edubeer — skill di progetto
@@ -9,8 +9,10 @@ Enciclopedia consultabile delle birre: **116 stili BJCP 2021** + **613 birre cit
 30 approfondimenti. App online: <https://edubeer.com>. Progetto hobby del CEO, pilota
 del workflow maistru-craft.
 
-Prima di lavorare qui leggi anche lo skill `maistru-craft`
-(~/.pi/agent/skills/maistru-craft/SKILL.md) — valori e convenzioni aziendali.
+Prima di lavorare qui leggi `PRODUCT.md` e `DESIGN.md`. Il redesign approvato
+dall'utente il 7 novembre 2026 sostituisce l'identità condivisa maistru-craft:
+atlante da esplorare (A), confronto da degustazione (B). Le precedenti prescrizioni
+di brutalismo e sincronizzazione dei token non si applicano più a EduBeer.
 
 ## Stack (dichiarato per conventions/STACKS.md)
 
@@ -19,13 +21,11 @@ Prima di lavorare qui leggi anche lo skill `maistru-craft`
   (`ui/charts/`), **zero dipendenze runtime oltre a React**.
 - **Testing**: vitest (dev-only) dal ticket T-003 (conventions/TEST.md). Prima di T-003
   il typecheck è `npm run build` (`tsc -b --noEmit` + vite build).
-- **Styling**: CSS custom che consuma i token aziendali. `src/tokens.css` è
-  **generato** da `maistru-craft/design-system/tokens.css` con `npm run sync-tokens`:
-  si usano solo i nomi semantici (`--background`, `--surface-1..3`, `--border`,
-  `--foreground*`, `--accent*`, `--positive*`, `--danger*`, `--series-1..5`).
-  Identità: neubrutalism disciplinato, tema chiaro **neo-paper** (DESIGN.md v2).
-  Unica eccezione locale: `--foam` (bicchiere SVG). Font display Archivo Variable
-  self-hosted (`src/assets/`, OFL) — asset, non dipendenza runtime.
+- **Styling**: CSS custom e token locali autonomi in `src/tokens.css`.
+  Identità: fondo porcellana, testo bruno e petrolio; Source Serif 4 per i titoli,
+  Source Sans 3 per testo e controlli, WOFF2 self-hosted con licenze OFL.
+  `DESIGN.md` e `.impeccable/design.json` documentano il sistema finale.
+  Il comando `sync-tokens` è stato rimosso: non ripristinare token esterni.
 - **Deploy**: Vercel, dominio https://edubeer.com, `vercel.json` esplicito
   (`framework: "vite"`, `outputDirectory: "dist"`). Routing su hash: nessun rewrite SPA.
   **Mai modificare `vercel.json` senza ticket.**
@@ -59,7 +59,6 @@ usa più `--bg-0`, `--ink`, `--amber`, `--line`, `--green`. I valori vivono in
 ```bash
 npm run build        # typecheck (tsc -b --noEmit) + bundle statico
 npm test             # suite vitest su src/lib/ (vitest run) — include il test di contrasto dei token
-npm run sync-tokens  # riallinea src/tokens.css dalla fonte aziendale
 ```
 
 Screenshot UI: skill `frontend-verification`, **uno alla volta** (amdgpu).
@@ -69,8 +68,9 @@ Screenshot UI: skill `frontend-verification`, **uno alla volta** (amdgpu).
 - Logica pura in `src/lib/` (`catalog.ts`, `styleFilter.ts`, `compare.ts`, `beer.ts`,
   `color.ts`) — testabile senza browser, prima cosa da testare.
 - Colori SRM (`lib/color.ts`) sono **dato**, non tema: non si sostituiscono con la palette.
-- Codice colore **locale** della famiglia BJCP (striscia 6px sulle card): Lager blu,
-  Ale giallo, Trappista viola, Spontanea rosa, Speciale verde. Semantico, non aziendale.
+- Le famiglie sono etichette e filtri. Il colore della birra deriva dall'SRM;
+  in assenza di dato il bicchiere resta vuoto. Nei grafici di confronto i segmenti
+  SRM hanno un contorno interno contrastato per mantenere leggibili gli estremi.
 - URL condivisibili: i filtri vivono nella query dell'hash (`#/birre?stile=15B&abv=8-14`)
   — ogni filtro/ordinamento aggiunto deve rispettare questo contratto.
 - Confronta: selezione 2–5 stili in `localStorage`, sopravvive alla navigazione.

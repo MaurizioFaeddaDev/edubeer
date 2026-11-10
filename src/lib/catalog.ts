@@ -1,3 +1,4 @@
+import { parseRange } from './range';
 import { BJCP_BEERS } from '../data/bjcp-beers';
 import { BJCP_BY_ID, BJCP_CATEGORIES, BJCP_STYLES } from '../data/bjcp';
 import type { BjcpBeer } from '../data/bjcp-beers';
@@ -60,11 +61,7 @@ const pairRange = (pick: (s: BjcpStyle) => [number, number] | null): NumRange =>
 export const ABV_RANGE = pairRange((s) => s.abv);
 export const IBU_RANGE = pairRange((s) => s.ibu);
 
-const srmValues = BJCP_STYLES.map((s) => s.srm).filter((v): v is number => v != null);
-export const SRM_RANGE: NumRange = {
-  min: Math.floor(Math.min(...srmValues)),
-  max: Math.ceil(Math.max(...srmValues)),
-};
+export const SRM_RANGE = pairRange((s) => s.color);
 
 /** Metà di un intervallo di stile. Per ordinare e per mostrare un valore singolo. */
 export const mid = (p: [number, number] | null): number | null => (p ? (p[0] + p[1]) / 2 : null);
@@ -151,11 +148,7 @@ export function matchesBeer(b: BjcpBeer, q: CatalogQuery): boolean {
   if (q.styles.length && !q.styles.includes(s.id)) return false;
   if (!overlaps(s.abv, q.abv, ABV_RANGE)) return false;
   if (!overlaps(s.ibu, q.ibu, IBU_RANGE)) return false;
-  if (s.srm == null) {
-    if (!(q.srm.min <= SRM_RANGE.min + EPS && q.srm.max >= SRM_RANGE.max - EPS)) return false;
-  } else if (s.srm < q.srm.min - EPS || s.srm > q.srm.max + EPS) {
-    return false;
-  }
+  if (!overlaps(s.color, q.srm, SRM_RANGE)) return false;
   const text = q.text.trim();
   if (text) {
     const idx = INDEX.get(b.id) ?? '';
@@ -225,13 +218,6 @@ export function toCatalogSearch(q: CatalogQuery): string {
   return s ? `?${s}` : '';
 }
 
-function numPair(raw: string | null, fallback: NumRange): NumRange {
-  if (!raw) return { ...fallback };
-  const [a, b] = raw.split('-');
-  const num = (s: string, f: number) => (s != null && s.trim() !== '' && Number.isFinite(Number(s)) ? Number(s) : f);
-  return { min: num(a, fallback.min), max: num(b, fallback.max) };
-}
-
 export function fromCatalogSearch(search: string): CatalogQuery {
   const p = new URLSearchParams(search);
   const pipe = (k: string) => (p.get(k) ? p.get(k)!.split('|').filter(Boolean) : []);
@@ -242,9 +228,9 @@ export function fromCatalogSearch(search: string): CatalogQuery {
     categories: pipe('cat'),
     families: pipe('fam'),
     styles: comma('stile'),
-    abv: numPair(p.get('abv'), ABV_RANGE),
-    ibu: numPair(p.get('ibu'), IBU_RANGE),
-    srm: numPair(p.get('srm'), SRM_RANGE),
+    abv: parseRange(p.get('abv'), ABV_RANGE),
+    ibu: parseRange(p.get('ibu'), IBU_RANGE),
+    srm: parseRange(p.get('srm'), SRM_RANGE),
     sort: SORTS.some((s) => s.id === sort) ? (sort as CatalogSort) : 'name',
   };
 }

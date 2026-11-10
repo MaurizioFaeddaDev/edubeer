@@ -174,3 +174,19 @@ describe('compare — sortStyles', () => {
     expect(c.sortStyles([nullAbv, withAbv], 'abv-desc').at(0)).toBe(nullAbv);
   });
 });
+
+
+describe('compare — shared links', () => {
+  it('deduplicates imported storage and shared IDs, rejecting unknown values', async () => {
+    storage.setItem(STORAGE_KEY, JSON.stringify(['3B', '3B', 'bad', '5D']));
+    const c = await load();
+    expect(c.useCompare()).toEqual(['3B', '5D']);
+    c.applyCompareLink('stili=5D,5D,invalid,3B');
+    expect(c.useCompare()).toEqual(['5D', '3B']);
+    expect(c.compareHref(c.useCompare())).toBe('#/confronta?stili=5D,3B');
+    c.applyCompareLink('');
+    expect(c.useCompare()).toEqual(['5D', '3B']);
+    c.applyCompareLink('stili=');
+    expect(c.useCompare()).toEqual([]);
+  });
+});

@@ -1,0 +1,480 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-07T11:02:24.894679+00:00",
+  "title": "Design System: EduBeer",
+  "extensions": {
+    "colorMeta": {
+      "background": {
+        "role": "neutral",
+        "displayName": "Porcelain",
+        "canonical": "#fafcfc",
+        "tonalRamp": [
+          "oklch(15% 0.0006 197.12)",
+          "oklch(26% 0.0012 197.12)",
+          "oklch(38% 0.0017 197.12)",
+          "oklch(50% 0.0021 197.12)",
+          "oklch(62% 0.0021 197.12)",
+          "oklch(74% 0.0017 197.12)",
+          "oklch(86% 0.0010 197.12)",
+          "oklch(95% 0.0003 197.12)"
+        ]
+      },
+      "surface-1": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(50% 0.0000 89.88)",
+          "oklch(62% 0.0000 89.88)",
+          "oklch(74% 0.0000 89.88)",
+          "oklch(86% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Cool mist",
+        "canonical": "#edf2f3",
+        "tonalRamp": [
+          "oklch(15% 0.0017 211.04)",
+          "oklch(26% 0.0030 211.04)",
+          "oklch(38% 0.0044 211.04)",
+          "oklch(50% 0.0055 211.04)",
+          "oklch(62% 0.0055 211.04)",
+          "oklch(74% 0.0044 211.04)",
+          "oklch(86% 0.0025 211.04)",
+          "oklch(95% 0.0008 211.04)"
+        ]
+      },
+      "surface-3": {
+        "role": "neutral",
+        "displayName": "Deeper mist",
+        "canonical": "#dfe8e9",
+        "tonalRamp": [
+          "oklch(15% 0.0029 204.91)",
+          "oklch(26% 0.0054 204.91)",
+          "oklch(38% 0.0078 204.91)",
+          "oklch(50% 0.0097 204.91)",
+          "oklch(62% 0.0097 204.91)",
+          "oklch(74% 0.0078 204.91)",
+          "oklch(86% 0.0044 204.91)",
+          "oklch(95% 0.0015 204.91)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Espresso",
+        "canonical": "#302922",
+        "tonalRamp": [
+          "oklch(15% 0.0048 67.11)",
+          "oklch(26% 0.0089 67.11)",
+          "oklch(38% 0.0129 67.11)",
+          "oklch(50% 0.0162 67.11)",
+          "oklch(62% 0.0162 67.11)",
+          "oklch(74% 0.0129 67.11)",
+          "oklch(86% 0.0073 67.11)",
+          "oklch(95% 0.0024 67.11)"
+        ]
+      },
+      "foreground-muted": {
+        "role": "neutral",
+        "displayName": "Warm gray",
+        "canonical": "#605a54",
+        "tonalRamp": [
+          "oklch(15% 0.0037 67.52)",
+          "oklch(26% 0.0068 67.52)",
+          "oklch(38% 0.0098 67.52)",
+          "oklch(50% 0.0123 67.52)",
+          "oklch(62% 0.0123 67.52)",
+          "oklch(74% 0.0098 67.52)",
+          "oklch(86% 0.0055 67.52)",
+          "oklch(95% 0.0018 67.52)"
+        ]
+      },
+      "foreground-faint": {
+        "role": "neutral",
+        "displayName": "Placeholder gray",
+        "canonical": "#68625d",
+        "tonalRamp": [
+          "oklch(15% 0.0033 62.42)",
+          "oklch(26% 0.0060 62.42)",
+          "oklch(38% 0.0088 62.42)",
+          "oklch(50% 0.0110 62.42)",
+          "oklch(62% 0.0110 62.42)",
+          "oklch(74% 0.0088 62.42)",
+          "oklch(86% 0.0049 62.42)",
+          "oklch(95% 0.0016 62.42)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Control edge",
+        "canonical": "#7a8585",
+        "tonalRamp": [
+          "oklch(15% 0.0039 196.82)",
+          "oklch(26% 0.0071 196.82)",
+          "oklch(38% 0.0104 196.82)",
+          "oklch(50% 0.0130 196.82)",
+          "oklch(62% 0.0130 196.82)",
+          "oklch(74% 0.0104 196.82)",
+          "oklch(86% 0.0058 196.82)",
+          "oklch(95% 0.0019 196.82)"
+        ]
+      },
+      "border-soft": {
+        "role": "neutral",
+        "displayName": "Quiet divider",
+        "canonical": "#d6dfe0",
+        "tonalRamp": [
+          "oklch(15% 0.0029 204.91)",
+          "oklch(26% 0.0054 204.91)",
+          "oklch(38% 0.0079 204.91)",
+          "oklch(50% 0.0098 204.91)",
+          "oklch(62% 0.0098 204.91)",
+          "oklch(74% 0.0079 204.91)",
+          "oklch(86% 0.0044 204.91)",
+          "oklch(95% 0.0015 204.91)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Petrol",
+        "canonical": "#175a63",
+        "tonalRamp": [
+          "oklch(15% 0.0197 208.15)",
+          "oklch(26% 0.0361 208.15)",
+          "oklch(38% 0.0525 208.15)",
+          "oklch(50% 0.0657 208.15)",
+          "oklch(62% 0.0657 208.15)",
+          "oklch(74% 0.0525 208.15)",
+          "oklch(86% 0.0296 208.15)",
+          "oklch(95% 0.0099 208.15)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Deep petrol",
+        "canonical": "#10434b",
+        "tonalRamp": [
+          "oklch(15% 0.0161 210.12)",
+          "oklch(26% 0.0295 210.12)",
+          "oklch(38% 0.0428 210.12)",
+          "oklch(50% 0.0536 210.12)",
+          "oklch(62% 0.0536 210.12)",
+          "oklch(74% 0.0428 210.12)",
+          "oklch(86% 0.0241 210.12)",
+          "oklch(95% 0.0080 210.12)"
+        ]
+      },
+      "on-accent": {
+        "role": "primary",
+        "displayName": "On petrol",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(50% 0.0000 89.88)",
+          "oklch(62% 0.0000 89.88)",
+          "oklch(74% 0.0000 89.88)",
+          "oklch(86% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "accent-ink": {
+        "role": "primary",
+        "displayName": "Petrol ink",
+        "canonical": "#175a63",
+        "tonalRamp": [
+          "oklch(15% 0.0197 208.15)",
+          "oklch(26% 0.0361 208.15)",
+          "oklch(38% 0.0525 208.15)",
+          "oklch(50% 0.0657 208.15)",
+          "oklch(62% 0.0657 208.15)",
+          "oklch(74% 0.0525 208.15)",
+          "oklch(86% 0.0296 208.15)",
+          "oklch(95% 0.0099 208.15)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Pale petrol",
+        "canonical": "#e6f0f1",
+        "tonalRamp": [
+          "oklch(15% 0.0032 204.12)",
+          "oklch(26% 0.0059 204.12)",
+          "oklch(38% 0.0086 204.12)",
+          "oklch(50% 0.0107 204.12)",
+          "oklch(62% 0.0107 204.12)",
+          "oklch(74% 0.0086 204.12)",
+          "oklch(86% 0.0048 204.12)",
+          "oklch(95% 0.0016 204.12)"
+        ]
+      },
+      "series-1": {
+        "role": "secondary",
+        "displayName": "Petrol series",
+        "canonical": "#175a63",
+        "tonalRamp": [
+          "oklch(15% 0.0197 208.15)",
+          "oklch(26% 0.0361 208.15)",
+          "oklch(38% 0.0525 208.15)",
+          "oklch(50% 0.0657 208.15)",
+          "oklch(62% 0.0657 208.15)",
+          "oklch(74% 0.0525 208.15)",
+          "oklch(86% 0.0296 208.15)",
+          "oklch(95% 0.0099 208.15)"
+        ]
+      },
+      "series-2": {
+        "role": "secondary",
+        "displayName": "Burnt copper series",
+        "canonical": "#a34c24",
+        "tonalRamp": [
+          "oklch(15% 0.0380 43.29)",
+          "oklch(26% 0.0698 43.29)",
+          "oklch(38% 0.1015 43.29)",
+          "oklch(50% 0.1268 43.29)",
+          "oklch(62% 0.1268 43.29)",
+          "oklch(74% 0.1015 43.29)",
+          "oklch(86% 0.0571 43.29)",
+          "oklch(95% 0.0190 43.29)"
+        ]
+      },
+      "series-3": {
+        "role": "secondary",
+        "displayName": "Muted violet series",
+        "canonical": "#66528e",
+        "tonalRamp": [
+          "oklch(15% 0.0288 298.10)",
+          "oklch(26% 0.0528 298.10)",
+          "oklch(38% 0.0768 298.10)",
+          "oklch(50% 0.0960 298.10)",
+          "oklch(62% 0.0960 298.10)",
+          "oklch(74% 0.0768 298.10)",
+          "oklch(86% 0.0432 298.10)",
+          "oklch(95% 0.0144 298.10)"
+        ]
+      },
+      "series-4": {
+        "role": "secondary",
+        "displayName": "Leaf green series",
+        "canonical": "#426935",
+        "tonalRamp": [
+          "oklch(15% 0.0272 138.30)",
+          "oklch(26% 0.0499 138.30)",
+          "oklch(38% 0.0725 138.30)",
+          "oklch(50% 0.0907 138.30)",
+          "oklch(62% 0.0907 138.30)",
+          "oklch(74% 0.0725 138.30)",
+          "oklch(86% 0.0408 138.30)",
+          "oklch(95% 0.0136 138.30)"
+        ]
+      },
+      "series-5": {
+        "role": "secondary",
+        "displayName": "Berry series",
+        "canonical": "#a3315c",
+        "tonalRamp": [
+          "oklch(15% 0.0460 1.46)",
+          "oklch(26% 0.0843 1.46)",
+          "oklch(38% 0.1226 1.46)",
+          "oklch(50% 0.1533 1.46)",
+          "oklch(62% 0.1533 1.46)",
+          "oklch(74% 0.1226 1.46)",
+          "oklch(86% 0.0690 1.46)",
+          "oklch(95% 0.0230 1.46)"
+        ]
+      },
+      "foam": {
+        "role": "secondary",
+        "displayName": "Foam",
+        "canonical": "#fffcef",
+        "tonalRamp": [
+          "oklch(15% 0.0052 96.10)",
+          "oklch(26% 0.0095 96.10)",
+          "oklch(38% 0.0139 96.10)",
+          "oklch(50% 0.0174 96.10)",
+          "oklch(62% 0.0174 96.10)",
+          "oklch(74% 0.0139 96.10)",
+          "oklch(86% 0.0078 96.10)",
+          "oklch(95% 0.0026 96.10)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Fluid serif page headings."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Serif section headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Serif subsection titles with contextual list overrides."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Sans reading text, 70ch primary measure."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Short introductory copy; body size below 480px."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Sans labels; component weights follow actual CSS."
+      },
+      "caption": {
+        "displayName": "Compact caption",
+        "purpose": "Small source labels, axes and metadata; the CSS caption class itself uses fs-sm."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-popover",
+        "value": "0 10px 30px #3029221a",
+        "purpose": "Search result popover only; ordinary lists and cards remain flat."
+      }
+    ],
+    "motion": [
+      {
+        "name": "dur-1",
+        "value": "140ms",
+        "purpose": "Background and text color transition on links and buttons, only with no reduced-motion preference."
+      },
+      {
+        "name": "dur-2",
+        "value": "220ms",
+        "purpose": "Defined local duration; not applied by the shared transition rule."
+      },
+      {
+        "name": "ease-snap",
+        "value": "cubic-bezier(.2,.8,.2,1)",
+        "purpose": "Defined local easing; not applied by the shared transition rule."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop",
+        "value": "1200px"
+      },
+      {
+        "name": "wrapped-header",
+        "value": "1000px"
+      },
+      {
+        "name": "single-reading-column",
+        "value": "760px"
+      },
+      {
+        "name": "phone",
+        "value": "480px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Filled petrol action, with a deep petrol hover and visible keyboard focus.",
+      "html": "<button class=\"ds-button ds-primary\">Esplora gli stili</button>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 14px;border:1px solid var(--border,#7a8585);border-radius:var(--radius-sm,6px);font-size:var(--fs-sm,.9375rem);line-height:1.3;cursor:pointer;font-family:var(--font-body,'Source Sans 3','Segoe UI',sans-serif);}.ds-button:focus-visible{outline:3px solid var(--accent,#175a63);outline-offset:4px}.ds-button:disabled{opacity:.55;cursor:not-allowed}@media(max-width:480px){.ds-button{min-height:44px}}@media(prefers-reduced-motion:no-preference){.ds-button{transition:background-color var(--dur-1,140ms),color var(--dur-1,140ms)}}.ds-primary{background:var(--accent,#175a63);color:var(--on-accent,#ffffff);border-color:var(--accent,#175a63)}.ds-primary:hover{background:var(--accent-hover,#10434b)}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "White compact action used for filters, CSV and comparison controls.",
+      "html": "<button class=\"ds-button ds-secondary\">Filtri avanzati</button>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 14px;border:1px solid var(--border,#7a8585);border-radius:var(--radius-sm,6px);font-size:var(--fs-sm,.9375rem);line-height:1.3;cursor:pointer;font-family:var(--font-body,'Source Sans 3','Segoe UI',sans-serif);}.ds-button:focus-visible{outline:3px solid var(--accent,#175a63);outline-offset:4px}.ds-button:disabled{opacity:.55;cursor:not-allowed}@media(max-width:480px){.ds-button{min-height:44px}}@media(prefers-reduced-motion:no-preference){.ds-button{transition:background-color var(--dur-1,140ms),color var(--dur-1,140ms)}}.ds-secondary{background:var(--surface-1,#ffffff);color:var(--foreground,#302922)}.ds-secondary:hover{background:var(--accent-soft,#e6f0f1);color:var(--accent-ink,#175a63)}"
+    },
+    {
+      "name": "Selected comparison action",
+      "kind": "button",
+      "refersTo": "compare-selected",
+      "description": "Selection is conveyed by pale petrol, text and aria-pressed.",
+      "html": "<button class=\"ds-button ds-selected\" aria-pressed=\"true\" aria-label=\"Rimuovi dal confronto 1A\">Nel confronto</button>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 14px;border:1px solid var(--border,#7a8585);border-radius:var(--radius-sm,6px);font-size:var(--fs-sm,.9375rem);line-height:1.3;cursor:pointer;font-family:var(--font-body,'Source Sans 3','Segoe UI',sans-serif);}.ds-button:focus-visible{outline:3px solid var(--accent,#175a63);outline-offset:4px}.ds-button:disabled{opacity:.55;cursor:not-allowed}@media(max-width:480px){.ds-button{min-height:44px}}@media(prefers-reduced-motion:no-preference){.ds-button{transition:background-color var(--dur-1,140ms),color var(--dur-1,140ms)}}.ds-selected{background:var(--accent-soft,#e6f0f1);color:var(--accent-ink,#175a63);border-color:var(--accent,#175a63)}.ds-selected:hover{background:var(--accent-soft,#e6f0f1)}"
+    },
+    {
+      "name": "Search field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "White search surface with a distinct control boundary and a descriptive accessible name.",
+      "html": "<input class=\"ds-search\" type=\"search\" aria-label=\"Cerca nella guida e nel catalogo\" placeholder=\"Cerca birre o stili…\">",
+      "css": ".ds-search{display:block;width:100%;max-width:345px;min-height:44px;padding:10px 42px 10px 14px;border:1px solid var(--border,#7a8585);border-radius:var(--radius-sm,6px);background:var(--surface-1,#ffffff);color:var(--foreground,#302922);font-size:var(--fs-md,1rem);font-family:var(--font-body,'Source Sans 3','Segoe UI',sans-serif);}.ds-search::placeholder{color:var(--foreground-faint,#68625d);opacity:1}.ds-search:focus-visible{outline:3px solid var(--accent,#175a63);outline-offset:4px}"
+    },
+    {
+      "name": "Selected removable chip",
+      "kind": "chip",
+      "refersTo": "chip-selected",
+      "description": "Named comparison selection with a text-equivalent removal action.",
+      "html": "<button class=\"ds-chip\" aria-label=\"Rimuovi American Light Lager dal confronto\"><span class=\"ds-dot\" aria-hidden=\"true\"></span>1A American Light Lager <span aria-hidden=\"true\">×</span></button>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:5px 11px;border:1px solid var(--accent,#175a63);border-radius:var(--radius-sm,6px);background:var(--accent-soft,#e6f0f1);color:var(--accent-ink,#175a63);font-size:var(--fs-xs,.8125rem);cursor:pointer;font-family:var(--font-body,'Source Sans 3','Segoe UI',sans-serif);}.ds-chip:hover{background:var(--surface-3,#dfe8e9)}.ds-chip:focus-visible{outline:3px solid var(--accent,#175a63);outline-offset:4px}.ds-dot{display:inline-block;flex-shrink:0;width:10px;height:10px;border-radius:50%;background:var(--series-1,#175a63)}@media(max-width:480px){.ds-chip{min-height:44px}}"
+    },
+    {
+      "name": "Atlas navigation",
+      "kind": "nav",
+      "description": "Petrol active destination, underline and a small comparison count.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Navigazione principale\"><a class=\"ds-navlink ds-current\" href=\"#/\" aria-current=\"page\">Stili</a><a class=\"ds-navlink\" href=\"#/birre\">Birre</a><a class=\"ds-navlink\" href=\"#/confronta\">Confronta <span class=\"ds-count\">2</span></a><a class=\"ds-navlink\" href=\"#/approfondimenti\">Approfondimenti</a></nav>",
+      "css": ".ds-nav{display:flex;gap:24px;flex-wrap:wrap;font-family:var(--font-body,'Source Sans 3','Segoe UI',sans-serif);}.ds-navlink{display:inline-flex;align-items:center;gap:6px;position:relative;min-height:44px;color:var(--foreground-muted,#605a54);font-weight:550;text-decoration:none}.ds-current{color:var(--accent,#175a63)}.ds-current:after{content:'';position:absolute;height:2px;bottom:0;left:0;right:0;background:var(--accent,#175a63)}.ds-navlink:hover{text-decoration:underline;text-underline-offset:4px}.ds-navlink:focus-visible{outline:3px solid var(--accent,#175a63);outline-offset:4px}.ds-count{background:var(--accent-soft,#e6f0f1);color:var(--accent-ink,#175a63);border-radius:var(--radius-pill,999px);padding:1px 7px;font-size:var(--fs-xs,.8125rem)}"
+    },
+    {
+      "name": "SRM interval",
+      "kind": "custom",
+      "description": "Actual 2–3 SRM example from style 1A on the 0–40 SRM comparison domain. Endpoint colors come from srmToHex; the inset espresso outline keeps pale fills visible. The tick is an interval midpoint.",
+      "html": "<div class=\"ds-range\" role=\"group\" aria-label=\"Colore: confronto degli intervalli\"><div class=\"ds-row\"><div class=\"ds-name\"><span class=\"ds-code\">1A</span> <a href=\"#/stili/1A\">American Light Lager</a></div><div class=\"ds-track\" aria-hidden=\"true\"><span class=\"ds-interval\"><span class=\"ds-mid\"></span></span></div><div class=\"ds-value\">2–3 SRM</div></div><p class=\"ds-caption\">La tacca indica il punto medio dell’intervallo, non un valore misurato sulle birre.</p></div>",
+      "css": ".ds-range{color:var(--foreground,#302922);font-family:var(--font-body,'Source Sans 3','Segoe UI',sans-serif);}.ds-row{display:grid;grid-template-columns:240px minmax(0,1fr) 130px;align-items:center;gap:24px;margin:22px 0}.ds-name,.ds-value{font-size:var(--fs-sm,.9375rem)}.ds-name a{color:var(--foreground,#302922);text-decoration:none}.ds-name a:hover{text-decoration:underline}.ds-name a:focus-visible{outline:3px solid var(--accent,#175a63);outline-offset:4px}.ds-code{color:var(--accent-ink,#175a63);font-weight:600}.ds-value{text-align:right;font-variant-numeric:tabular-nums}.ds-track{height:20px;position:relative;background:var(--surface-2,#edf2f3);border-radius:3px}.ds-interval{position:absolute;left:5%;width:2.5%;min-width:3px;top:6px;height:8px;border-radius:3px;background:linear-gradient(90deg,#f4e995,#f1e07e);outline:1px solid var(--foreground,#302922);outline-offset:-1px}.ds-mid{position:absolute;left:50%;top:-3px;height:14px;width:2px;background:var(--foreground,#302922)}.ds-caption{color:var(--foreground-muted,#605a54);font-size:var(--fs-sm,.9375rem);line-height:1.5}@media(max-width:760px){.ds-row{grid-template-columns:1fr auto;gap:10px;margin:24px 0}.ds-track{grid-column:1/-1;grid-row:2}.ds-value{grid-column:2;grid-row:1}.ds-name a{overflow-wrap:anywhere}}"
+    },
+    {
+      "name": "Open beer card",
+      "kind": "card",
+      "description": "A flat catalog row with a title, style label and source-qualified ranges; separated by a bottom rule.",
+      "html": "<article class=\"ds-card\"><a class=\"ds-card-link\" href=\"#/birre\"><div><h3>Birre di riferimento</h3><p class=\"ds-card-style\">American Light Lager</p><p class=\"ds-card-meta\">Intervalli dello stile · BJCP 2021</p><p class=\"ds-card-meta\">2,8–4,2% vol · 8–12 IBU · 2–3 SRM</p></div></a></article>",
+      "css": ".ds-card{border-bottom:1px solid var(--border-soft,#d6dfe0);font-family:var(--font-body,'Source Sans 3','Segoe UI',sans-serif)}.ds-card-link{display:flex;gap:18px;align-items:flex-start;padding:25px 8px;color:var(--foreground,#302922);text-decoration:none}.ds-card-link:hover{background:var(--accent-soft,#e6f0f1);border-radius:var(--radius-sm,6px)}.ds-card-link:focus-visible{outline:3px solid var(--accent,#175a63);outline-offset:4px}.ds-card h3{margin:0;font-family:var(--font-display,'Source Serif 4',Georgia,serif);font-size:1.45rem;font-weight:650;line-height:1.16;letter-spacing:-.025em}.ds-card-style{margin:8px 0 0;color:var(--accent-ink,#175a63);font-size:var(--fs-sm,.9375rem)}.ds-card-meta{margin:10px 0 0;color:var(--foreground-muted,#605a54);font-size:var(--fs-xs,.8125rem);font-variant-numeric:tabular-nums}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Atlante da esplorare, confronto da degustazione",
+    "overview": "EduBeer is a calm, approachable atlas whose identity comes from consulting beer styles. Porcelain backgrounds, espresso text and petrol selections hold together humanist headings, geometric beer glasses and exact numerical intervals. Open lists invite exploration; the comparison surface increases information density within the same visual language.\n\nThe interface distinguishes Italian introductions, official English BJCP descriptions and curated beer content. Source captions and explicit units belong beside the information they explain. The shipping visual vocabulary uses SVG geometry and locally hosted fonts, with no raster imagery.",
+    "keyCharacteristics": [
+      "Porcelain, espresso and petrol with restrained tonal surfaces.",
+      "Humanist serif headings and practical sans text and controls.",
+      "Flat separators, open lists and modest control corners.",
+      "Illustrative SVG glasses and source-based SRM color.",
+      "Exact ranges, visible units and text alongside chart color."
+    ],
+    "rules": [
+      {
+        "name": "The Boundary Rule",
+        "body": "Use the control-edge token for interactive boundaries; the quiet-divider token separates content.",
+        "section": "colors"
+      },
+      {
+        "name": "The Missing-Value Rule",
+        "body": "Missing ranges stay missing: show a dash and explanatory context, draw no interval segment, and do not substitute a numerical zero. A missing SRM value produces an empty glass labeled “Colore non dichiarato”; the color scale explains the absence of a declared range.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** keep source context, metric units and exact interval values visible beside the data.",
+      "**Do** use petrol for interaction, tabular numerals for comparisons and serif headings for reading hierarchy.",
+      "**Do** preserve the inset espresso outline around actual-color SRM comparison bars.",
+      "**Do** wrap controls and long names, and keep table overflow inside its own region.",
+      "**Do** pair color with text, explicit selection states and accessible labels."
+    ],
+    "donts": [
+      "**Don't** attribute BJCP style ranges to a single commercial beer or replace missing values with zero.",
+      "**Don't** use SRM color as a quality score or present interval midpoints as measured beer values.",
+      "**Don't** reintroduce graph-paper backgrounds, thick black borders, hard shadows or accumulated decorative badges.",
+      "**Don't** replace the shipped SVG geometry with invented bottle photography or copied study imagery."
+    ]
+  }
+}

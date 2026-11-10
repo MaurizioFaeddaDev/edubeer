@@ -1,324 +1,194 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BeerGlass } from './ui/BeerGlass';
+import { ThemeSelect } from './ui/ThemeSelect';
 import { CatalogFilters, ActiveCatalogFilters } from './ui/CatalogFilters';
 import { StyleFilters, ActiveStyleFilters } from './ui/StyleFilters';
 import { CatalogView } from './ui/CatalogView';
 import { BeerPage } from './ui/BeerPage';
 import { DeepDiveList, DeepDivePage } from './ui/DeepDives';
 import { StyleGuide } from './ui/StyleGuide';
+import { StylePage } from './ui/StylePage';
 import { CompareView } from './ui/CompareView';
 import { SearchBar } from './ui/SearchBar';
 import { ExportCsvButton } from './ui/ExportCsvButton';
-import { useCompare } from './lib/compare';
+import { applyCompareLink, useCompare } from './lib/compare';
 import { speciesOf } from './lib/beer';
-import { BEER_CSV_FILENAME, beersCsv } from './lib/csv';
-import {
-  EMPTY_STYLE_QUERY, countStyleFilters, fromStyleSearch, searchStyles, toStyleSearch,
-} from './lib/styleFilter';
+import { BEER_CSV_FILENAME, beersCsv, STYLE_CSV_FILENAME, stylesCsv } from './lib/csv';
+import { countStyleFilters, fromStyleSearch, searchStyles, toStyleSearch } from './lib/styleFilter';
 import type { StyleQuery } from './lib/styleFilter';
-import {
-  ALL_BEERS, STYLES, EMPTY_CATALOG, countActiveFilters, fromCatalogSearch, searchBeers,
-  toCatalogSearch, beerOf, type CatalogQuery,
-} from './lib/catalog';
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Router minimale su hash: i filtri stanno nell'URL, quindi una ricerca è
-// condivisibile.
-//   #/                        i 116 stili BJCP (homepage)
-//   #/?fam=Lager&abv=8-        stili filtrati
-//   #/birre                   catalogo delle birre citate dal BJCP
-//   #/birre?q=stout&stile=15B catalogo filtrato
-//   #/b/pilsner-urquell       scheda di una birra BJCP
-//   #/confronta               confronto 2–5 stili
-//   #/approfondimenti         le 30 schede curate
-//   #/a/saison-dupont         scheda di approfondimento
-// ─────────────────────────────────────────────────────────────────────────────
-
-type Route =
-  | { name: 'styles' }
-  | { name: 'catalog' }
-  | { name: 'beer'; id: string }
-  | { name: 'compare' }
-  | { name: 'deep' }
-  | { name: 'deepDetail'; id: string };
-
-function parseHash(): { route: Route; search: string } {
-  const raw = location.hash.replace(/^#/, '') || '/';
-  const [path, search = ''] = raw.split('?');
-  if (path.startsWith('/b/')) return { route: { name: 'beer', id: decodeURIComponent(path.slice(3)) }, search };
-  if (path.startsWith('/a/')) return { route: { name: 'deepDetail', id: decodeURIComponent(path.slice(3)) }, search };
-  if (path === '/birre') return { route: { name: 'catalog' }, search };
-  if (path === '/confronta') return { route: { name: 'compare' }, search };
-  if (path === '/approfondimenti') return { route: { name: 'deep' }, search };
-  // «/» e «/stili» sono la stessa pagina: la guida agli stili è l'homepage.
-  return { route: { name: 'styles' }, search };
-}
+import { ALL_BEERS, STYLES, EMPTY_CATALOG, countActiveFilters, fromCatalogSearch, searchBeers, toCatalogSearch, beerOf, styleById, type CatalogQuery } from './lib/catalog';
+import { parseRoute, styleHref, beerHref } from './lib/routes';
 
 export default function App() {
   const [hash, setHash] = useState(() => location.hash || '#/');
-  const [query, setQuery] = useState<CatalogQuery>(() => fromCatalogSearch(parseHash().search));
-  const [styleQuery, setStyleQuery] = useState<StyleQuery>(() => fromStyleSearch(parseHash().search));
-  const [styleFocus, setStyleFocus] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  const pagePath = hash.split('?')[0];
+  const { route } = useMemo(() => parseRoute(hash), [hash]);
+  const [query, setQuery] = useState<CatalogQuery>(() => fromCatalogSearch(parseRoute(location.hash).search));
+  const [styleQuery, setStyleQuery] = useState<StyleQuery>(() => fromStyleSearch(parseRoute(location.hash).search));
+  const [deepText, setDeepText] = useState(() => new URLSearchParams(parseRoute(location.hash).search).get('q') ?? '');
+  const returns = useRef({ catalog: parseRoute(location.hash).route.name === 'catalog' ? location.hash : '#/birre', deep: parseRoute(location.hash).route.name === 'deep' ? location.hash : '#/approfondimenti', styles: parseRoute(location.hash).route.name === 'styles' ? location.hash : '#/' });
+  const positions = useRef(new Map<string, number>());
+  const navigated = useRef(false);
   const [searchDraft, setSearchDraft] = useState('');
-  const [filtersOpen, setFiltersOpen] = useState(() => window.innerWidth > 1080);
-  const [styleFiltersOpen, setStyleFiltersOpen] = useState(() => window.innerWidth > 1080);
+  const [catalogLimits, setCatalogLimits] = useState<Record<string, number>>({});
+  const catalogKey = toCatalogSearch(query);
+  const catalogLimit = catalogLimits[catalogKey] ?? 60;
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [styleFiltersOpen, setStyleFiltersOpen] = useState(false);
+  const compareCount = useCompare().length;
+
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const update = () => {
+      const active = nav.querySelector<HTMLElement>('[aria-current="page"]');
+      const indicator = nav.querySelector<HTMLElement>('.nav-indicator');
+      if (!indicator) return;
+      indicator.style.opacity = active ? '1' : '0';
+      if (!active) return;
+      const label = active.querySelector<HTMLElement>('.nav-label');
+      const width = Math.min(28, label?.offsetWidth ?? active.offsetWidth);
+      const center = active.offsetLeft + (label ? label.offsetLeft + label.offsetWidth / 2 : active.offsetWidth / 2);
+      indicator.style.width = `${width}px`;
+      indicator.style.transform = `translateX(${center - width / 2}px)`;
+      indicator.style.bottom = `${nav.clientHeight - active.offsetTop - active.offsetHeight}px`;
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(nav);
+    nav.querySelectorAll('.nav').forEach(item => observer.observe(item));
+    return () => observer.disconnect();
+  }, [route.name, compareCount]);
+
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const animation = mainRef.current?.animate(
+      [{ opacity: .65, transform: 'translateY(5px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 180, easing: 'cubic-bezier(.16, 1, .3, 1)' },
+    );
+    return () => animation?.cancel();
+  }, [pagePath]);
 
   useEffect(() => {
     const onHash = () => {
-      setHash(location.hash || '#/');
-      window.scrollTo({ top: 0 });
-      const parsed = parseHash();
-      // Arrivando da fuori (es. «tutte le birre dello stile 3B») i filtri
-      // vanno riletti dall'URL, altrimenti resterebbero quelli di prima.
+      const current = location.hash || '#/';
+      const parsed = parseRoute(current);
+      navigated.current = true;
+      if (parsed.route.name === 'catalog') returns.current.catalog = current;
+      if (parsed.route.name === 'styles') returns.current.styles = current;
+      if (parsed.route.name === 'deep') { returns.current.deep = current; setDeepText(new URLSearchParams(parsed.search).get('q') ?? ''); }
+      if (parsed.route.name === 'compare') applyCompareLink(parsed.search);
+      setHash(current);
+      setSearchDraft('');
       if (parsed.route.name === 'catalog') setQuery(fromCatalogSearch(parsed.search));
       if (parsed.route.name === 'styles') setStyleQuery(fromStyleSearch(parsed.search));
+
     };
+    if (parseRoute(location.hash).route.name === 'compare') applyCompareLink(parseRoute(location.hash).search);
+    const onScroll = () => positions.current.set(location.hash || '#/', window.scrollY);
+    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('hashchange', onHash);
-    return () => window.removeEventListener('hashchange', onHash);
+    return () => { window.removeEventListener('hashchange', onHash); window.removeEventListener('scroll', onScroll); };
   }, []);
-
-  const { route } = useMemo(() => parseHash(), [hash]);
-
-  // I filtri modificano l'URL senza aggiungere voci alla cronologia.
-  useEffect(() => {
-    if (route.name !== 'catalog') return;
-    const next = `#/birre${toCatalogSearch(query)}`;
-    if (next !== (location.hash || '#/')) history.replaceState(null, '', next);
-  }, [query, route.name]);
-
-  useEffect(() => {
-    if (route.name !== 'styles') return;
-    const next = `#/${toStyleSearch(styleQuery)}`;
-    if (next !== (location.hash || '#/')) history.replaceState(null, '', next);
-  }, [styleQuery, route.name]);
-
-  useEffect(() => { window.scrollTo({ top: 0 }); }, []);
-
-  const go = useCallback((path: string) => { location.hash = path; }, []);
-  const openBeer = useCallback((id: string) => go(`/b/${encodeURIComponent(id)}`), [go]);
-  const openDeepDive = useCallback((id: string) => go(`/a/${encodeURIComponent(id)}`), [go]);
-  const openStyle = useCallback((code: string) => go(`/birre?stile=${encodeURIComponent(code)}`), [go]);
-
-  // Salta a uno stile preciso dalla ricerca globale, azzerando i filtri così
-  // la card è sicuramente visibile.
-  const openStyleFocus = useCallback((id: string) => {
-    setStyleQuery({ ...EMPTY_STYLE_QUERY });
-    setStyleFocus(id);
-    if (route.name !== 'styles') go('/');
-  }, [route.name, go]);
-  const clearStyleFocus = useCallback(() => setStyleFocus(null), []);
-
-  const results = useMemo(() => searchBeers(query), [query]);
-  const activeCount = countActiveFilters(query);
-  const styleResults = useMemo(() => searchStyles(styleQuery), [styleQuery]);
-  const styleActiveCount = countStyleFilters(styleQuery);
-
-  // Scorciatoia "/" per la ricerca in navbar.
+  useLayoutEffect(() => {
+    if (!navigated.current) return;
+    const top = positions.current.get(hash) ?? 0;
+    document.getElementById('main')?.focus({ preventScroll: true });
+    window.scrollTo({ top, behavior: 'instant' });
+  }, [hash]);
+  const updateDeepText = (text: string) => {
+    setDeepText(text);
+    const params = new URLSearchParams(); if (text.trim()) params.set('q', text.trim());
+    const next = `#/approfondimenti${params.size ? `?${params}` : ''}`;
+    returns.current.deep = next; history.replaceState(null, '', next);
+  };
+  const updateCatalog = (next: CatalogQuery) => {
+    setQuery(next);
+    if (parseRoute(location.hash).route.name === 'catalog') { returns.current.catalog = `#/birre${toCatalogSearch(next)}`; history.replaceState(null, '', returns.current.catalog); }
+  };
+  const updateStyles = (next: StyleQuery) => {
+    setStyleQuery(next);
+    if (parseRoute(location.hash).route.name === 'styles') { returns.current.styles = `#/${toStyleSearch(next)}`; history.replaceState(null, '', returns.current.styles); }
+  };
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement)?.tagName;
-      if (e.key === '/' && tag !== 'INPUT' && tag !== 'SELECT') {
+      const target = e.target as HTMLElement;
+      if (e.key === '/' && !target.closest('input, select, textarea, [contenteditable="true"]')) {
         e.preventDefault();
-        document.querySelector<HTMLInputElement>('.topsearch input')?.focus();
+        const search = document.querySelector<HTMLInputElement>('.topsearch input');
+        if (search && search.tabIndex === 0) search.focus();
+        else document.querySelector<HTMLButtonElement>('.search-trigger')?.click();
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
-
-  // Il campo di ricerca segue la sezione: birre nel catalogo, stili nella guida,
-  // e altrove tiene l'ultima parola scritta.
-  const searchValue = route.name === 'catalog'
-    ? query.text
-    : route.name === 'styles'
-      ? styleQuery.text
-      : searchDraft;
-
-  const onSearch = useCallback((v: string) => {
-    setSearchDraft(v);
-    if (route.name === 'catalog') setQuery((q) => ({ ...q, text: v }));
-    else if (route.name === 'styles') setStyleQuery((q) => ({ ...q, text: v }));
-  }, [route.name]);
-
-  const submitSearch = useCallback((v: string) => {
-    const next: CatalogQuery = route.name === 'catalog'
-      ? { ...query, text: v }
-      : { ...EMPTY_CATALOG, text: v };
-    setQuery(next);
-    go(`/birre${toCatalogSearch(next)}`);
-  }, [route.name, query, go]);
-
+  const go = useCallback((path: string) => { location.hash = path; }, []);
+  const openBeer = useCallback((id: string) => { location.hash = beerHref(id); }, []);
+  const openStyle = useCallback((id: string) => { location.hash = styleHref(id); }, []);
+  const results = useMemo(() => searchBeers(query), [query]);
+  const styleResults = useMemo(() => searchStyles(styleQuery), [styleQuery]);
+  const activeCount = countActiveFilters(query);
+  const styleActiveCount = countStyleFilters(styleQuery);
   const beer = route.name === 'beer' ? beerOf(route.id) : undefined;
   const deep = route.name === 'deepDetail' ? speciesOf(route.id) : undefined;
-
-  return (
-    <div className="app">
-      <Header
-        route={route}
-        onNavigate={go}
-        searchValue={searchValue}
-        onSearch={onSearch}
-        onSubmitSearch={submitSearch}
-        onOpenBeer={openBeer}
-        onOpenStyle={openStyleFocus}
-      />
-
-      <main className="main">
-        {route.name === 'catalog' && (
-          <div className="layout">
-            <div className={`sidebar ${filtersOpen ? 'open' : 'closed'}`}>
-              <button className="filters-toggle" onClick={() => setFiltersOpen((v) => !v)}>
-                {filtersOpen ? '▾ Nascondi i filtri' : '▸ Filtri'}
-                {activeCount > 0 && <span className="badge">{activeCount}</span>}
-              </button>
-              <CatalogFilters query={query} onChange={setQuery} resultCount={results.length} />
-            </div>
-            <div className="content">
-              {results.length > 0 && (
-                <div className="results-bar">
-                  <span>{results.length} {results.length === 1 ? 'birra' : 'birre'}</span>
-                  <ExportCsvButton filename={BEER_CSV_FILENAME} build={() => beersCsv(results)} />
-                </div>
-              )}
-              <ActiveCatalogFilters query={query} onChange={setQuery} />
-              {activeCount === 0 && (
-                <div className="intro">
-                  <h1>Le birre che il BJCP cita, tutte insieme</h1>
-                  <p>
-                    {ALL_BEERS.length} birre commerciali, ognuna legata allo stile che le
-                    linee guida BJCP 2021 le attribuiscono. Cerca dalla barra in alto, filtra
-                    per categoria, famiglia, stile e intervallo di gradazione, amarezza o colore.
-                  </p>
-                  <p className="dim">
-                    Il BJCP non descrive le singole birre: descrive gli stili. Ogni scheda lo
-                    dice in chiaro e mostra i numeri <b>dello stile</b>, non della bottiglia.
-                    Per partire dal documento, apri <b>Stili</b>.
-                  </p>
-                </div>
-              )}
-              <CatalogView beers={results} onOpen={openBeer} />
-            </div>
-          </div>
-        )}
-
-        {route.name === 'beer' && (
-          beer
-            ? (
-              <div className="layout single">
-                <div className="content">
-                  <BeerPage beer={beer} onOpen={openBeer} onOpenStyle={openStyle} onBack={() => go('/birre')} />
-                </div>
-              </div>
-            )
-            : <NotFound label="Questa birra non è fra quelle citate dal BJCP." onHome={() => go('/birre')} />
-        )}
-
-        {route.name === 'styles' && (
-          <div className="layout">
-            <div className={`sidebar ${styleFiltersOpen ? 'open' : 'closed'}`}>
-              <button className="filters-toggle" onClick={() => setStyleFiltersOpen((v) => !v)}>
-                {styleFiltersOpen ? '▾ Nascondi i filtri' : '▸ Filtri'}
-                {styleActiveCount > 0 && <span className="badge">{styleActiveCount}</span>}
-              </button>
-              <StyleFilters query={styleQuery} onChange={setStyleQuery} resultCount={styleResults.length} />
-            </div>
-            <div className="content">
-              <ActiveStyleFilters query={styleQuery} onChange={setStyleQuery} />
-              <StyleGuide
-                query={styleQuery}
-                onOpenBeer={openDeepDive}
-                onOpenStyle={openStyle}
-                focusId={styleFocus}
-                onFocusHandled={clearStyleFocus}
-              />
-            </div>
-          </div>
-        )}
-
-        {route.name === 'compare' && <CompareView onGoStyles={() => go('/')} />}
-
-        {route.name === 'deep' && <DeepDiveList onOpen={openDeepDive} />}
-
-        {route.name === 'deepDetail' && (
-          deep
-            ? (
-              <div className="layout single">
-                <div className="content">
-                  <DeepDivePage species={deep} onOpenStyle={openStyle} onBack={() => go('/approfondimenti')} />
-                </div>
-              </div>
-            )
-            : <NotFound label="Questa scheda di approfondimento non esiste." onHome={() => go('/approfondimenti')} />
-        )}
-      </main>
-
-      <Footer />
-    </div>
-  );
-}
-
-function Header({
-  route, onNavigate, searchValue, onSearch, onSubmitSearch, onOpenBeer, onOpenStyle,
-}: {
-  route: Route;
-  onNavigate: (p: string) => void;
-  searchValue: string;
-  onSearch: (v: string) => void;
-  onSubmitSearch: (v: string) => void;
-  onOpenBeer: (id: string) => void;
-  onOpenStyle: (id: string) => void;
-}) {
-  const isCatalog = route.name === 'catalog' || route.name === 'beer';
-  const isDeep = route.name === 'deep' || route.name === 'deepDetail';
-  const compareCount = useCompare().length;
-  return (
-    <header className="topbar">
-      <button className="brand" onClick={() => onNavigate('/')}>
-        <BeerGlass srm={9} level={1} shape="tulipano" size={20} />
-        <span>EduBeer</span>
-      </button>
-
-      <SearchBar
-        value={searchValue}
-        onChange={onSearch}
-        onSubmit={onSubmitSearch}
-        onOpenBeer={onOpenBeer}
-        onOpenStyle={onOpenStyle}
-      />
-
-      <nav>
-        <button className={`nav ${route.name === 'styles' ? 'on' : ''}`} onClick={() => onNavigate('/')}>Stili</button>
-        <button className={`nav ${route.name === 'compare' ? 'on' : ''}`} onClick={() => onNavigate('/confronta')}>
-          Confronta
-          {compareCount > 0 && <span className="nav-badge">{compareCount}</span>}
-        </button>
-        <button className={`nav ${isCatalog ? 'on' : ''}`} onClick={() => onNavigate('/birre')}>Birre</button>
-        <button className={`nav ${isDeep ? 'on' : ''}`} onClick={() => onNavigate('/approfondimenti')}>Approfondimenti</button>
-      </nav>
+  const style = route.name === 'style' ? styleById(route.id) : undefined;
+  useEffect(() => {
+    const section = route.name === 'style' ? style?.name : route.name === 'beer' ? beer?.name
+      : route.name === 'deepDetail' ? deep?.name : route.name === 'catalog' ? 'Le birre'
+      : route.name === 'compare' ? 'Confronta gli stili' : route.name === 'deep' ? 'Approfondimenti' : 'Atlante degli stili';
+    document.title = `${section ?? 'Scheda non trovata'} · EduBeer`;
+  }, [route.name, style?.name, beer?.name, deep?.name]);
+  const searchValue = route.name === 'catalog' ? query.text : route.name === 'styles' ? styleQuery.text : searchDraft;
+  const onSearch = (value: string) => {
+    setSearchDraft(value);
+    if (route.name === 'catalog') updateCatalog({ ...query, text: value });
+    if (route.name === 'styles') updateStyles({ ...styleQuery, text: value });
+  };
+  const submitSearch = (value: string) => {
+    const next = { ...(route.name === 'catalog' ? query : EMPTY_CATALOG), text: value };
+    setQuery(next); go(`/birre${toCatalogSearch(next)}`);
+  };
+  const nav = [
+    { href: '#/', name: 'Stili', active: route.name === 'styles' || route.name === 'style' },
+    { href: '#/birre', name: 'Birre', active: route.name === 'catalog' || route.name === 'beer' },
+    { href: '#/confronta', name: 'Confronta', active: route.name === 'compare' },
+    ...(import.meta.env.DEV ? [{ href: '#/approfondimenti', name: 'Approfondimenti', active: route.name === 'deep' || route.name === 'deepDetail' }] : []),
+  ];
+  return <div className="app">
+    <a href="#main" className="skip-link" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Vai al contenuto</a>
+    <header className="topbar"><a href="#/" className="brand" aria-label="EduBeer, atlante degli stili"><BeerGlass srm={8} size={25} shape="tulipano" /><span>EduBeer</span></a>
+      <nav ref={navRef} aria-label="Navigazione principale">{nav.map(item => <a key={item.name} href={item.href} className={`nav ${item.active ? 'on' : ''}`} aria-current={item.active ? 'page' : undefined}>
+        <span className="nav-label">{item.name}</span>{item.name === 'Confronta' && compareCount > 0 && <span className="nav-badge">{compareCount}</span>}</a>)}<span className="nav-indicator" aria-hidden="true" /></nav>
+      <SearchBar value={searchValue} onChange={onSearch} onSubmit={submitSearch} onOpenBeer={openBeer} onOpenStyle={openStyle} />
+      <ThemeSelect />
     </header>
-  );
+    <main ref={mainRef} id="main" className="main" tabIndex={-1}>
+      {route.name === 'styles' && <>
+        <header className="page-heading"><div><h1>Trova il tuo prossimo stile.</h1><p className="lede">Esplora le differenze, dal primo sorso ai dettagli.</p></div><p className="source-label">{STYLES.length} stili da conoscere<br /><span>Linee guida BJCP 2021</span></p></header>
+        <div className="atlas-toolbar"><p aria-live="polite"><b>{styleResults.length}</b> stili nell’atlante</p><div className="toolbar-actions"><ExportCsvButton filename={STYLE_CSV_FILENAME} build={() => stylesCsv(styleResults)} /><button className="mini" aria-label="Filtri e ordinamento" aria-expanded={styleFiltersOpen} aria-controls="style-filters" onClick={() => setStyleFiltersOpen(v => !v)}>Filtri{styleActiveCount > 0 ? ` (${styleActiveCount})` : ''}</button></div></div>
+        <div id="style-filters" hidden={!styleFiltersOpen} className="filter-drawer"><StyleFilters query={styleQuery} onChange={updateStyles} resultCount={styleResults.length} /></div>
+        <ActiveStyleFilters query={styleQuery} onChange={updateStyles} /><StyleGuide query={styleQuery} filtered={styleResults} onChange={updateStyles} />
+      </>}
+      {route.name === 'style' && (style ? <StylePage style={style} backHref={returns.current.styles} /> : <NotFound label="Questo stile non è presente nell’atlante." href="#/" />)}
+      {route.name === 'catalog' && <>
+        <header className="page-heading"><div><h1>Le birre, attraverso gli stili.</h1><p className="lede">Gli esempi commerciali citati dal BJCP. Un punto di partenza per riconoscere ciò che hai nel bicchiere.</p></div><p className="source-label">{ALL_BEERS.length} birre citate<br /><span>Linee guida BJCP 2021</span></p></header>
+        <p className="note">I numeri indicano gli intervalli dello stile, non i valori della singola bottiglia.{import.meta.env.DEV && <> Per le schede editoriali e lo stato delle fonti, esplora gli <a href="#/approfondimenti">approfondimenti</a>.</>}</p>
+        <div className="atlas-toolbar"><p aria-live="polite"><b>{results.length}</b> birre</p><div className="toolbar-actions"><ExportCsvButton filename={BEER_CSV_FILENAME} build={() => beersCsv(results)} /><button className="mini" aria-expanded={filtersOpen} aria-controls="beer-filters" onClick={() => setFiltersOpen(v => !v)}>Filtri e ordinamento{activeCount > 0 ? ` (${activeCount})` : ''}</button></div></div>
+        <div id="beer-filters" hidden={!filtersOpen} className="filter-drawer"><CatalogFilters query={query} onChange={updateCatalog} resultCount={results.length} /></div><ActiveCatalogFilters query={query} onChange={updateCatalog} />
+        {results.length ? <CatalogView beers={results} limit={catalogLimit} onMore={() => setCatalogLimits(previous => ({ ...previous, [catalogKey]: catalogLimit + 60 }))} /> : <div className="empty"><h2>Nessuna birra trovata</h2><p>Prova una ricerca più breve o rimuovi qualche filtro.</p><button className="big" onClick={() => updateCatalog({ ...EMPTY_CATALOG })}>Azzera i filtri</button></div>}
+      </>}
+      {route.name === 'beer' && (beer ? <BeerPage beer={beer} onOpen={openBeer} onOpenStyle={openStyle} onBack={() => go(returns.current.catalog)} /> : <NotFound label="Questa birra non è fra gli esempi citati dal BJCP." href="#/birre" />)}
+      {route.name === 'compare' && <CompareView onGoStyles={() => go('/')} />}
+      {import.meta.env.DEV && route.name === 'deep' && <DeepDiveList text={deepText} onText={updateDeepText} />}
+      {import.meta.env.DEV && route.name === 'deepDetail' && (deep ? <DeepDivePage species={deep} onOpenStyle={openStyle} onBack={() => go(returns.current.deep)} /> : <NotFound label="Questo approfondimento non esiste." href="#/approfondimenti" />)}
+      {route.name === 'notFound' && <NotFound label="L’indirizzo richiesto non corrisponde a una pagina dell’atlante." href="#/" />}
+    </main>
+    <footer className="footer"><a className="footer-brand" href="#/">EduBeer</a><p>La birra si conosce, un dettaglio alla volta.</p><a href="https://www.bjcp.org/bjcp-style-guidelines/" target="_blank" rel="noreferrer">Fonte: BJCP 2021</a></footer>
+  </div>;
 }
-
-function NotFound({ label, onHome }: { label: string; onHome: () => void }) {
-  return (
-    <div className="empty">
-      <h2>Scheda non trovata</h2>
-      <p className="dim">{label}</p>
-      <button className="big" onClick={onHome}>Torna indietro</button>
-    </div>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="footer">
-      <span>
-        {ALL_BEERS.length} birre citate · {STYLES.length} stili BJCP 2021 · 30 approfondimenti
-      </span>
-      <span className="dim">
-        Le schede degli stili sono le linee guida BJCP; gli approfondimenti sono scritti per
-        essere difendibili davanti a un birraio.
-      </span>
-    </footer>
-  );
+function NotFound({ label, href }: { label: string; href: string }) {
+  return <div className="empty"><h1>Scheda non trovata</h1><p>{label}</p><a className="big" href={href}>Torna all’atlante</a></div>;
 }

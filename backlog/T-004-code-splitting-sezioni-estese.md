@@ -30,3 +30,6 @@ tutto il corpus, per avere un caricamento più rapido.
 ## Registro
 
 - 2025-12 — aperto da PO (da README "Non fatto"); PM materializza il ticket.
+
+## Misura audit — 7 novembre 2026
+Il profilo riproducibile `npm run test:perf` rileva il costo di rendering del catalogo. T-016 introduce gruppi da 60 schede; questa ottimizzazione non è lazy loading dei testi BJCP. La separazione del corpus resta una distinta evoluzione del generatore, da misurare sul trasferimento iniziale prima di modificare le fonti generate.

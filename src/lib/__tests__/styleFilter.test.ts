@@ -17,6 +17,11 @@ import { ABV_RANGE, IBU_RANGE, SRM_RANGE, STYLES } from '../catalog';
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe('styleFilter — insieme dei dati', () => {
+  it('nei suggerimenti privilegia nome e codice rispetto alle citazioni nel testo', () => {
+    expect(suggestStyles('American Stout')[0].id).toBe('20B');
+    expect(suggestStyles('Weissbier')[0].id).toBe('10A');
+    expect(suggestStyles('3B')[0].id).toBe('3B');
+  });
   it('la query vuota restituisce tutti i 116 stili senza alterarne i conteggi', () => {
     expect(searchStyles(EMPTY_STYLE_QUERY)).toHaveLength(116);
     expect(STYLES).toHaveLength(116);

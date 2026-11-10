@@ -1,3 +1,4 @@
+import { MetricGlossary } from './MetricGlossary';
 import { BeerGlass } from './BeerGlass';
 import { beersOfStyle, rangeLabel, styleOfBeer } from '../lib/catalog';
 import type { BjcpBeer, BjcpStyle } from '../lib/catalog';
@@ -42,10 +43,10 @@ export function BeerPage({
 
   return (
     <article className="detail" data-family={s.family}>
-      <button className="link back" onClick={onBack}>← Enciclopedia</button>
+      <button className="link back" onClick={onBack}>← Torna alle birre</button>
 
       <header className="detail-head">
-        <BeerGlass srm={s.srm ?? 6} level={1} shape="tulipano" size={92} />
+        <BeerGlass srm={s.srm ?? 6} level={s.srm == null ? 0 : 1} label={s.srm == null ? 'Colore dello stile non dichiarato' : 'Colore medio dello stile, non della singola birra'} shape="tulipano" size={92} />
         <div className="detail-title">
           <p className="detail-style">
             <span className="bjcp-code">{s.code}</span> {s.name}
@@ -56,7 +57,7 @@ export function BeerPage({
           </p>
           <div className="detail-actions">
             <button className="mini" onClick={() => onOpenStyle(s.id)}>
-              tutte le birre dello stile {s.code} — {s.name}
+              Scopri lo stile {s.code}: {s.name}
             </button>
           </div>
         </div>
@@ -76,6 +77,7 @@ export function BeerPage({
         <Spec label="Densità finale" value={rangeLabel(s.fg, '', 3)} note="FG, intervallo di stile" />
       </section>
 
+      <MetricGlossary />
       <section className="blurb-wrap">
         <h2>In sintesi</h2>
         <p className="blurb">{s.blurb}</p>
@@ -94,7 +96,7 @@ export function BeerPage({
             return (
               <div key={key}>
                 <h3>{label}</h3>
-                <p>{text}</p>
+                <p lang="en">{text}</p>
               </div>
             );
           })}

@@ -3,20 +3,24 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "EduBeer — enciclopedia consultabile delle birre: 613 birre citate dal BJCP 2021, 116 stili, 30 approfondimenti con storia e abbinamento.",
+  "description": "EduBeer — atlante consultabile: 613 birre citate dal BJCP 2021, 116 stili e 30 approfondimenti editoriali.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b --noEmit && vite build",
     "test": "vitest run",
     "preview": "vite preview",
     "sync-data": "node scripts/sync-data.mjs",
-    "sync-tokens": "node scripts/sync-tokens.mjs"
+    "test:e2e": "npm run build && playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:perf": "npm run build && playwright test --config playwright.perf.config.ts"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@vitejs/plugin-react": "^4.4.0",
