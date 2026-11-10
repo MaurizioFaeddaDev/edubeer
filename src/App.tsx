@@ -164,12 +164,12 @@ export default function App({ introduction, preview = false, brandGraphic }: { i
       <nav ref={navRef} aria-label="Navigazione principale">{nav.map(item => <a key={item.name} href={item.href} className={`nav ${item.active ? 'on' : ''}`} aria-current={item.active ? 'page' : undefined}>
         <span className="nav-label">{item.name}</span>{item.name === 'Confronta' && compareCount > 0 && <span className="nav-badge">{compareCount}</span>}</a>)}<span className="nav-indicator" aria-hidden="true" /></nav>
       <SearchBar value={searchValue} onChange={onSearch} onSubmit={submitSearch} onOpenBeer={openBeer} onOpenStyle={openStyle} />
-      {!preview && <ThemeSelect />}
+      {!introduction && <ThemeSelect />}
     </header>
     <main ref={mainRef} id="main" className="main" data-page={route.name} tabIndex={-1}>
       {route.name === 'styles' && <>
         {introduction}
-        <header className="page-heading" id="atlante"><div>{preview ? <h2>Tutti gli stili. La tua curiosità.</h2> : <h1>Trova il tuo prossimo stile.</h1>}<p className="lede">Esplora le differenze, dal primo sorso ai dettagli.</p></div><p className="source-label">{STYLES.length} stili da conoscere<br /><span>Linee guida BJCP 2021</span></p></header>
+        <header className="page-heading" id="atlante"><div>{introduction ? <h2>Tutti gli stili. La tua curiosità.</h2> : <h1>Trova il tuo prossimo stile.</h1>}<p className="lede">Esplora le differenze, dal primo sorso ai dettagli.</p></div><p className="source-label">{STYLES.length} stili da conoscere<br /><span>Linee guida BJCP 2021</span></p></header>
         <div className="atlas-toolbar"><p aria-live="polite"><b>{styleResults.length}</b> stili nell’atlante</p><div className="toolbar-actions"><ExportCsvButton filename={STYLE_CSV_FILENAME} build={() => stylesCsv(styleResults)} /><button className="mini" aria-label="Filtri e ordinamento" aria-expanded={styleFiltersOpen} aria-controls="style-filters" onClick={() => setStyleFiltersOpen(v => !v)}>Filtri{styleActiveCount > 0 ? ` (${styleActiveCount})` : ''}</button></div></div>
         <div id="style-filters" hidden={!styleFiltersOpen} className="filter-drawer"><StyleFilters query={styleQuery} onChange={updateStyles} resultCount={styleResults.length} /></div>
         <ActiveStyleFilters query={styleQuery} onChange={updateStyles} /><StyleGuide query={styleQuery} filtered={styleResults} onChange={updateStyles} />

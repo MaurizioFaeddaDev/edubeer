@@ -25,6 +25,7 @@
 .nav { color: var(--accent); font-size: 17px; font-weight: 600; }
 .nav-indicator { height: 4px; border-radius: 4px; }
 .topsearch { max-width: 290px; }
+@media (max-width: 700px) { .topbar .topsearch.search-expanded { order: 4; flex-basis: 100%; width: 100%; max-width: none; } }
 .main { width: min(1280px, calc(100% - 64px)); padding: 0 0 72px; }
 .pop-hero { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: 36px; padding: 66px 0 60px; }
 .pop-kicker { font-size: 15px; font-weight: 650; color: var(--accent); margin-bottom: 16px; }

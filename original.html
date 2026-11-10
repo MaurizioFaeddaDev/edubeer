@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="EduBeer — enciclopedia delle birre secondo il BJCP 2021: 116 stili, 613 birre citate e 30 approfondimenti con storia e abbinamento gastronomico." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="EduBeer — enciclopedia delle birre" />
+    <meta property="og:description" content="I 116 stili BJCP 2021, le 613 birre che il BJCP cita come esempio, il confronto fra stili e 30 approfondimenti con storia e abbinamento." />
+    <meta property="og:locale" content="it_IT" />
+    <meta name="theme-color" content="#fafcfc" />
+    <script>
+      (() => {
+        let theme = 'system';
+        try { theme = localStorage.getItem('edubeer-theme') || 'system'; } catch {}
+        const dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.querySelector('meta[name="theme-color"]').content = dark ? '#151c1e' : '#fafcfc';
+      })();
+    </script>
+    <title>EduBeer · Atlante degli stili</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/legacy.tsx"></script>
+  </body>
+</html>
+

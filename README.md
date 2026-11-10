@@ -121,3 +121,8 @@ Il ritorno alle liste conserva query e posizione durante la navigazione nella st
 Le definizioni di ABV, IBU, SRM, OG e FG sono disponibili accanto ai numeri. Le relazioni fra approfondimenti e BJCP sono esplicitamente presentate come stili correlati, senza scegliere arbitrariamente un unico codice.
 
 Il catalogo mostra 60 birre alla volta. «Mostra altre» aggiunge il gruppo successivo e porta il focus alla prima nuova voce; tornando dalla scheda resta visibile quanto già caricato. Ricerca, conteggi e CSV riguardano sempre tutte le birre corrispondenti.
+
+
+## Template Amarena & burro
+
+La homepage pubblica usa il template Amarena & burro con logo coordinato, bicchieri SVG e microanimazioni rispettose del movimento ridotto. La versione precedente resta disponibile in `/original.html`. In sviluppo `/pop.html` permette il confronto fra le nove palette. `npm run build` genera entrambe le pagine pubbliche; il laboratorio cromatico non entra nella build.

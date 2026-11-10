@@ -7,6 +7,7 @@ export default defineConfig({
   build: {
     target: 'es2022',
     rollupOptions: {
+      input: { main: 'index.html', original: 'original.html' },
       output: {
         manualChunks(id) {
           if (id.includes('/node_modules/')) return 'vendor';

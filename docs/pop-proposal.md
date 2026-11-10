@@ -1,3 +1,5 @@
+> Stato aggiornato: su richiesta dell’utente, Amarena & burro viene promossa a homepage pubblica. La build include `index.html` (nuovo template) e `original.html` (versione precedente). `pop.html` resta il laboratorio locale con il selettore delle palette. Le indicazioni sotto che descrivono la proposta come non pubblicata documentano le fasi precedenti e sono superate da questa decisione.
+
 # Proposta locale EduBeer pop/punk
 
 ## Template scelto â€” 10 novembre 2026
