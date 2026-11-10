@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { createContext, useContext, useId } from 'react';
 import { srmToHex, lighten, darken } from '../lib/color';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -6,6 +6,8 @@ import { srmToHex, lighten, darken } from '../lib/color';
 // Il livello del liquido segue il palato: quando il palato cede, il bicchiere
 // si svuota. È la sola lettura di stato che serve durante un duello.
 // ─────────────────────────────────────────────────────────────────────────────
+
+export const PopGlassContext = createContext(false);
 
 export type GlassShape = 'boccale' | 'tulipano' | 'calice' | 'snifter';
 
@@ -78,6 +80,8 @@ export function BeerGlass({
   srm, level = 1, shape = 'boccale', size = 96, head = true, className, label,
 }: Props) {
   const uid = useId().replace(/[:]/g, '');
+  const pop = useContext(PopGlassContext);
+  if (pop) return <PopBeerGlass srm={srm} level={level} shape={shape} size={size} head={head} className={className} label={label} uid={uid} />;
   const s = SHAPES[shape];
   const liquid = srmToHex(srm);
   const clipId = `clip-${uid}`;
@@ -90,6 +94,7 @@ export function BeerGlass({
   return (
     <div
       className={`glass-wrap ${className ?? ''}`}
+      data-glass-shape={shape}
       style={{ width: size, height: size * (VH / 100) }}
     >
       <svg
@@ -101,7 +106,7 @@ export function BeerGlass({
       >
         <defs>
           <clipPath id={clipId}>
-            <path d={s.bowl} />
+            <path className="beer-bowl" d={s.bowl} />
           </clipPath>
           <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor={darken(liquid, 0.22)} />
@@ -143,6 +148,24 @@ export function BeerGlass({
       </svg>
     </div>
   );
+}
+
+function PopBeerGlass({ srm, level = 1, shape = 'tulipano', size = 96, head = true, className, label, uid }: Props & { uid: string }) {
+  const pint = shape === 'boccale';
+  const bowl = pint ? 'M23 35 Q20 33 22 47 L28 112 Q29 126 42 126 H58 Q71 126 72 112 L78 47 Q80 33 77 35 Z' : shape === 'snifter' ? 'M29 35 C32 52 15 61 19 80 Q22 104 50 104 Q78 104 81 80 C85 61 68 52 71 35 Z' : 'M26 35 C29 54 17 57 21 78 Q25 101 50 101 Q75 101 79 78 C83 57 71 54 74 35 Z';
+  const bottom = pint ? 126 : 104;
+  const top = bottom - (bottom - 35) * Math.max(0, Math.min(1, level));
+  const liquid = srmToHex(srm);
+  return <div className={`glass-wrap pop-glass ${className ?? ''}`} data-glass-shape={shape} style={{ width: size, height: size * 1.48 }}>
+    <svg viewBox="0 0 100 148" width={size} height={size * 1.48} role="img" aria-label={label ?? 'Bicchiere di birra'}>
+      <defs><clipPath id={`pop-${uid}`}><path d={bowl} /></clipPath><linearGradient id={`pop-fill-${uid}`}><stop offset="0" stopColor={lighten(liquid, .08)} /><stop offset="1" stopColor={liquid} /></linearGradient></defs>
+      {!pint && <path className="pop-glass-outline" d="M43 101 Q47 114 42 119 Q27 120 26 128 Q50 140 74 128 Q73 120 58 119 Q53 114 57 101" />}
+      <path className="pop-glass-outline" d={bowl} />
+      <g clipPath={`url(#pop-${uid})`}><rect x="15" y={top} width="72" height="105" fill={`url(#pop-fill-${uid})`} />{level > .02 && <><path d="M34 62 Q29 73 32 83" className="pop-glass-highlight" /><circle cx="35" cy="92" r="3" fill="#fff9e9" /></>}</g>
+      <path className="pop-glass-rim" d={bowl} />
+      {head && level > .92 && <path className="pop-glass-foam" d="M23 43 C12 42 13 28 23 26 C21 15 36 10 43 18 C49 5 69 10 71 21 C84 18 91 32 82 40 Q79 44 72 42 L72 53 Q72 61 65 60 Q59 59 60 51 L60 43 Q47 49 39 41 Q29 47 23 43 Z" />}
+    </svg>
+  </div>;
 }
 
 /** Barra del palato, compatta, per liste e HUD. */

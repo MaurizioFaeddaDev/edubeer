@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { useState } from 'react';
 import App from './App';
+import { PopGlassContext } from './ui/BeerGlass';
 import { PopIntroduction } from './ui/PopIntroduction';
 import './styles.css';
 import './pop.css';
@@ -45,9 +46,17 @@ const initialPalette = palettes.some(palette => palette.id === initial) ? initia
 document.documentElement.dataset.popPalette = initialPalette;
 document.querySelector('meta[name="theme-color"]')?.setAttribute('content', palettes.find(palette => palette.id === initialPalette)!.colors[0]);
 
+function chooseMotion(target: EventTarget, related: EventTarget | null) {
+  if (!(target instanceof Element)) return;
+  const card = target.closest<HTMLElement>('.style-entry, .bcard, .pop-card');
+  if (!card || (related instanceof Node && card.contains(related))) return;
+  const previous = Number(card.dataset.glassMotion ?? -1);
+  card.dataset.glassMotion = String((previous + 1 + Math.floor(Math.random() * 4)) % 5);
+}
+
 function PopPreview() {
   const [selected, setSelected] = useState(initialPalette);
-  return <>
+  return <PopGlassContext.Provider value={true}><div onPointerOver={event => chooseMotion(event.target, event.relatedTarget)} onFocusCapture={event => chooseMotion(event.target, event.relatedTarget)}>
     <details className="palette-workbench">
       <summary>Template: Amarena & burro <span>Confronta le palette</span></summary>
       <div className="palette-picker" role="group" aria-label="Palette della proposta">
@@ -62,7 +71,7 @@ function PopPreview() {
       <p className="palette-note" aria-live="polite">{paletteNotes[selected]} Anche il logo segue la palette.</p>
       </div>
     </details>
-    <App preview introduction={<PopIntroduction logoSrc={logos[selected]} />} />
-  </>;
+    <App preview brandGraphic={<span className="pop-brand-lockup" aria-hidden="true"><span className="pop-brand-icon"><img src={logos[selected]} alt="" /></span><span className="pop-brand-wordmark"><img src={logos[selected]} alt="" /></span></span>} introduction={<PopIntroduction logoSrc={logos[selected]} />} />
+  </div></PopGlassContext.Provider>;
 }
 createRoot(document.getElementById('root')!).render(<PopPreview />);

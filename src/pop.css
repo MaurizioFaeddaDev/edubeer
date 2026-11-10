@@ -15,6 +15,12 @@
 .topbar { background: var(--background); border-bottom: 2px solid var(--accent); min-height: 88px; padding-inline: max(24px, calc((100vw - 1280px)/2)); gap: 38px; }
 .brand { color: var(--accent); font-weight: 900; font-size: 33px; letter-spacing: -2px; }
 .brand .glass-wrap { filter: saturate(1.3); }
+.pop-brand-lockup { display: flex; align-items: center; gap: 4px; width: 202px; height: 62px; }
+.pop-brand-icon, .pop-brand-wordmark { display: block; position: relative; overflow: hidden; flex-shrink: 0; }
+.pop-brand-icon { width: 52px; height: 59.6px; clip-path: polygon(0 0, 100% 0, 100% 94%, 80% 94%, 80% 100%, 22% 100%, 22% 94%, 0 94%); }
+.pop-brand-icon img { position: absolute; width: 84px; height: 84px; max-width: none; left: -18px; top: -3px; }
+.pop-brand-wordmark { width: 146px; height: 39px; clip-path: polygon(0 0, 35% 0, 35% 1px, 60% 1px, 60% 0, 100% 0, 100% 100%, 0 100%); }
+.pop-brand-wordmark img { position: absolute; width: 150px; height: 150px; max-width: none; left: -2px; top: -110.4px; }
 .topbar nav { gap: 28px; }
 .nav { color: var(--accent); font-size: 17px; font-weight: 600; }
 .nav-indicator { height: 4px; border-radius: 4px; }

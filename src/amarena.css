@@ -18,6 +18,7 @@
 }
 /* Scope to the approved palette: earlier colour studies remain available. */
 html[data-pop-palette='amarena'] {
+  .nav-badge { background: var(--accent); color: var(--on-accent); min-width: 24px; min-height: 24px; display: inline-flex; align-items: center; justify-content: center; padding: 2px 7px; font-size: 13px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
   .app:has(.main:not([data-page='styles'])) { background: var(--paper); }
   .main:not([data-page='styles']) { padding-top: 40px; }
   .main:not([data-page='styles']) > .page-heading { padding-top: 0; border-top: 0; }
@@ -27,17 +28,35 @@ html[data-pop-palette='amarena'] {
   .main:not([data-page='styles']) h3 { font-weight: 700; }
 
   /* Intro cards: one quiet illustration field, no colour-coded families. */
-  .pop-card { border: 1px solid var(--border-soft); border-radius: 18px; }
-  .pop-card-art, .pop-card-1 .pop-card-art, .pop-card-2 .pop-card-art { background: #fcf4df; border-bottom: 1px solid var(--border-soft); height: 136px; }
+  .pop-card { border: 2px solid var(--accent); border-radius: 28px; box-shadow: 4px 5px 0 #ead4be; }
+  .pop-card-art, .pop-card-1 .pop-card-art, .pop-card-2 .pop-card-art { background: #fbe8b5; border-bottom: 2px solid var(--accent); height: 152px; }
+  .pop-card-1 .pop-card-art { background: #f3dce7; }
+  .pop-card-2 .pop-card-art { background: #f7e8d2; }
   .pop-card-art > span:first-child { color: var(--accent); top: 16px; left: 22px; }
-  .pop-card-art .glass-wrap { transform: none; }
+  .pop-card-art .glass-wrap { transform: rotate(-5deg); }
+  .pop-card-1 .pop-card-art .glass-wrap { transform: rotate(5deg); }
   .pop-card-art .glass-wrap svg { height: 112px; width: auto; }
-  .pop-spark { font-size: 28px; color: var(--accent); }
-  .pop-card h3 { font-size: 25px; }
-  .pop-card-body { padding: 24px; }
+  .pop-spark { font-size: 36px; color: var(--accent); }
+  .pop-card h3 { font-size: 27px; font-weight: 850; letter-spacing: -.045em; }
+  .pop-card-body { padding: 24px; background: #fffbef; }
   .pop-card .style-numbers { margin-top: 0; }
-  .pop-card:hover { transform: none; box-shadow: 0 4px 16px #4821320a; border-color: var(--border); }
+  .pop-card:hover { transform: none; box-shadow: 4px 5px 0 #ead4be; border-color: var(--accent); }
   .pop-card-actions a { min-height: 44px; display: inline-flex; align-items: center; }
+  .pop-card-actions .compare-toggle { border-radius: 999px; border-color: var(--accent); background: #fff5d6; }
+  .pop-card-actions .compare-toggle.on { background: var(--accent); color: var(--on-accent); }
+  /* Rounded glass illustrations. Liquid fill and SRM gradient remain intact. */
+  :is(.style-entry, .bcard, .pop-card) .beer-glass { stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  :is(.style-entry, .bcard, .pop-card) .beer-shine { stroke-width: 3; stroke-opacity: .35; }
+  :is(.style-entry, .bcard, .pop-card) .beer-foam { fill: #fff9e9; }
+  :is(.style-entry, .bcard, .pop-card) [data-glass-shape='boccale'] .beer-glass { d: path('M24 8 Q17 8 18 18 L26 178 Q27 195 40 195 L60 195 Q73 195 74 178 L82 18 Q83 8 76 8 Z'); }
+  :is(.style-entry, .bcard, .pop-card) [data-glass-shape='boccale'] :is(.beer-bowl, .beer-shine) { d: path('M28 15 Q23 15 24 22 L31 177 Q32 188 41 188 L59 188 Q68 188 69 177 L76 22 Q77 15 72 15 Z'); }
+  :is(.style-entry, .bcard, .pop-card) .glass-wrap { transform-origin: 50% 88%; }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    :is(.style-entry, .bcard, .pop-card):hover .glass-wrap { animation: var(--glass-motion, amarena-glass-sway) 760ms ease-in-out both; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :is(.style-entry, .bcard, .pop-card):focus-within .glass-wrap { animation: var(--glass-motion, amarena-glass-sway) 760ms ease-in-out both; }
+  }
 
   /* Atlas and catalogue share the same reading surface and action states. */
   .page-heading { border-top: 1px solid var(--border-soft); }
@@ -54,6 +73,9 @@ html[data-pop-palette='amarena'] {
   .style-entry .style-numbers dt { font-size: 13px; }
   .style-preview { border-color: var(--border-soft); padding: 28px; }
   .style-preview h2 { color: var(--accent); }
+  .color-samples { height: 28px; gap: 5px; margin-block: 14px 10px; padding: 3px 2px; }
+  .color-samples > span { border-radius: 7px; }
+  .color-samples > span.in-range { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: 0 3px 0 #ead4be; }
   .category-heading { color: var(--foreground-muted); padding-bottom: 14px; }
   .category-heading > span, .style-code, .bjcp-code { font-variant-numeric: tabular-nums; }
   .grid { gap: 18px; }
@@ -139,4 +161,19 @@ html[data-pop-palette='amarena'] {
     .spec-grid { padding: 20px; grid-template-columns: 1fr 1fr; gap: 22px 12px; }
   }
 }
+@keyframes amarena-glass-sway { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-3deg); } 60% { transform: rotate(2deg); } 82% { transform: rotate(-.7deg); } }
 @media (max-width: 700px) { .palette-workbench > summary { padding-inline: 16px; } .palette-workbench > summary span { display: block; margin-left: 0; margin-top: 4px; } }
+
+.pop-glass-outline, .pop-glass-rim, .pop-glass-foam { stroke: var(--accent); stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; }
+.pop-glass-outline, .pop-glass-foam { fill: #fff9e9; }
+.pop-glass-rim { fill: none; }
+.pop-glass-highlight { fill: none; stroke: #fff9e9; stroke-width: 7; stroke-linecap: round; }
+[data-glass-motion='0'] { --glass-motion: amarena-glass-sway; }
+[data-glass-motion='1'] { --glass-motion: glass-bloom; }
+[data-glass-motion='2'] { --glass-motion: glass-float; }
+[data-glass-motion='3'] { --glass-motion: glass-nod; }
+[data-glass-motion='4'] { --glass-motion: glass-bounce; }
+@keyframes glass-bloom { 0%,100% { transform: scale(1); } 45% { transform: scale(1.045); } }
+@keyframes glass-float { 0%,100% { transform: translateY(0); } 45% { transform: translateY(-3px); } }
+@keyframes glass-nod { 0%,100% { transform: rotate(0) scale(1); } 45% { transform: rotate(2.5deg) scale(1.02); } }
+@keyframes glass-bounce { 0%,100% { transform: translateY(0) scale(1); } 30% { transform: translateY(1px) scale(1.015,.985); } 60% { transform: translateY(-2px) scale(.99,1.015); } }

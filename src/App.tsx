@@ -19,7 +19,7 @@ import type { StyleQuery } from './lib/styleFilter';
 import { ALL_BEERS, STYLES, EMPTY_CATALOG, countActiveFilters, fromCatalogSearch, searchBeers, toCatalogSearch, beerOf, styleById, type CatalogQuery } from './lib/catalog';
 import { parseRoute, styleHref, beerHref } from './lib/routes';
 
-export default function App({ introduction, preview = false }: { introduction?: ReactNode; preview?: boolean } = {}) {
+export default function App({ introduction, preview = false, brandGraphic }: { introduction?: ReactNode; preview?: boolean; brandGraphic?: ReactNode } = {}) {
   const [hash, setHash] = useState(() => location.hash || '#/');
   const navRef = useRef<HTMLElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -160,7 +160,7 @@ export default function App({ introduction, preview = false }: { introduction?: 
   return <div className="app">
     {preview && <div className="proposal-bar">Proposta pop/punk <a href="/">Vedi la versione attuale ↗</a></div>}
     <a href="#main" className="skip-link" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Vai al contenuto</a>
-    <header className="topbar"><a href="#/" className="brand" aria-label="EduBeer, atlante degli stili"><BeerGlass srm={8} size={25} shape="tulipano" /><span>EduBeer</span></a>
+    <header className="topbar"><a href="#/" className="brand" aria-label="EduBeer, atlante degli stili">{brandGraphic ?? <><BeerGlass srm={8} size={25} shape="tulipano" /><span>EduBeer</span></>}</a>
       <nav ref={navRef} aria-label="Navigazione principale">{nav.map(item => <a key={item.name} href={item.href} className={`nav ${item.active ? 'on' : ''}`} aria-current={item.active ? 'page' : undefined}>
         <span className="nav-label">{item.name}</span>{item.name === 'Confronta' && compareCount > 0 && <span className="nav-badge">{compareCount}</span>}</a>)}<span className="nav-indicator" aria-hidden="true" /></nav>
       <SearchBar value={searchValue} onChange={onSearch} onSubmit={submitSearch} onOpenBeer={openBeer} onOpenStyle={openStyle} />
