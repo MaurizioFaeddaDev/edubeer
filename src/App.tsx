@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { BeerGlass } from './ui/BeerGlass';
 import { ThemeSelect } from './ui/ThemeSelect';
 import { CatalogFilters, ActiveCatalogFilters } from './ui/CatalogFilters';
@@ -19,7 +19,7 @@ import type { StyleQuery } from './lib/styleFilter';
 import { ALL_BEERS, STYLES, EMPTY_CATALOG, countActiveFilters, fromCatalogSearch, searchBeers, toCatalogSearch, beerOf, styleById, type CatalogQuery } from './lib/catalog';
 import { parseRoute, styleHref, beerHref } from './lib/routes';
 
-export default function App() {
+export default function App({ introduction, preview = false }: { introduction?: ReactNode; preview?: boolean } = {}) {
   const [hash, setHash] = useState(() => location.hash || '#/');
   const navRef = useRef<HTMLElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -158,16 +158,18 @@ export default function App() {
     ...(import.meta.env.DEV ? [{ href: '#/approfondimenti', name: 'Approfondimenti', active: route.name === 'deep' || route.name === 'deepDetail' }] : []),
   ];
   return <div className="app">
+    {preview && <div className="proposal-bar">Proposta pop/punk <a href="/">Vedi la versione attuale ↗</a></div>}
     <a href="#main" className="skip-link" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Vai al contenuto</a>
     <header className="topbar"><a href="#/" className="brand" aria-label="EduBeer, atlante degli stili"><BeerGlass srm={8} size={25} shape="tulipano" /><span>EduBeer</span></a>
       <nav ref={navRef} aria-label="Navigazione principale">{nav.map(item => <a key={item.name} href={item.href} className={`nav ${item.active ? 'on' : ''}`} aria-current={item.active ? 'page' : undefined}>
         <span className="nav-label">{item.name}</span>{item.name === 'Confronta' && compareCount > 0 && <span className="nav-badge">{compareCount}</span>}</a>)}<span className="nav-indicator" aria-hidden="true" /></nav>
       <SearchBar value={searchValue} onChange={onSearch} onSubmit={submitSearch} onOpenBeer={openBeer} onOpenStyle={openStyle} />
-      <ThemeSelect />
+      {!preview && <ThemeSelect />}
     </header>
-    <main ref={mainRef} id="main" className="main" tabIndex={-1}>
+    <main ref={mainRef} id="main" className="main" data-page={route.name} tabIndex={-1}>
       {route.name === 'styles' && <>
-        <header className="page-heading"><div><h1>Trova il tuo prossimo stile.</h1><p className="lede">Esplora le differenze, dal primo sorso ai dettagli.</p></div><p className="source-label">{STYLES.length} stili da conoscere<br /><span>Linee guida BJCP 2021</span></p></header>
+        {introduction}
+        <header className="page-heading" id="atlante"><div>{preview ? <h2>Tutti gli stili. La tua curiosità.</h2> : <h1>Trova il tuo prossimo stile.</h1>}<p className="lede">Esplora le differenze, dal primo sorso ai dettagli.</p></div><p className="source-label">{STYLES.length} stili da conoscere<br /><span>Linee guida BJCP 2021</span></p></header>
         <div className="atlas-toolbar"><p aria-live="polite"><b>{styleResults.length}</b> stili nell’atlante</p><div className="toolbar-actions"><ExportCsvButton filename={STYLE_CSV_FILENAME} build={() => stylesCsv(styleResults)} /><button className="mini" aria-label="Filtri e ordinamento" aria-expanded={styleFiltersOpen} aria-controls="style-filters" onClick={() => setStyleFiltersOpen(v => !v)}>Filtri{styleActiveCount > 0 ? ` (${styleActiveCount})` : ''}</button></div></div>
         <div id="style-filters" hidden={!styleFiltersOpen} className="filter-drawer"><StyleFilters query={styleQuery} onChange={updateStyles} resultCount={styleResults.length} /></div>
         <ActiveStyleFilters query={styleQuery} onChange={updateStyles} /><StyleGuide query={styleQuery} filtered={styleResults} onChange={updateStyles} />

@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "archivo pop",
+        "createdAt": "2026-11-10T13:57:04.769Z",
+        "reason": "Agent decision: isolated pop.html proposal requested by user; uses existing local Archivo font, current site typography preserved"
+      }
+    ]
+  }
+}

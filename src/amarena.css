@@ -1,0 +1,142 @@
+/* Selected template. Hero colours remain in pop-palettes.css; reading surfaces
+   and controls below use neutral paper, with cherry reserved for hierarchy. */
+.palette-workbench { background: #fff; color: #482132; border-bottom: 1px solid #e1d8cf; }
+.palette-workbench > summary { padding: 12px max(24px, calc((100vw - 1280px)/2)); min-height: 44px; font-size: 14px; color: #482132; }
+.palette-workbench > summary span { margin-left: 18px; font-weight: 400; text-decoration: underline; }
+.palette-workbench .palette-picker { border: 0; }
+
+:root[data-pop-palette='amarena'] {
+  --surface-1: #fffdf8;
+  --surface-2: #f2ede3;
+  --surface-3: #e9e0d3;
+  --border: #9c827a;
+  --border-soft: #e2d7c9;
+  --accent-soft: #f9e9e9;
+  --paper: #faf7f0;
+  --reading-ink: #392e2b;
+  --reading-muted: #6b5d55;
+}
+/* Scope to the approved palette: earlier colour studies remain available. */
+html[data-pop-palette='amarena'] {
+  .app:has(.main:not([data-page='styles'])) { background: var(--paper); }
+  .main:not([data-page='styles']) { padding-top: 40px; }
+  .main:not([data-page='styles']) > .page-heading { padding-top: 0; border-top: 0; }
+  .main:not([data-page='styles']) h1 { color: var(--accent); font-weight: 800; font-size: clamp(32px, 4vw, 52px); line-height: 1.1; }
+  .main:not([data-page='styles']), .pop-discover, .guide, .filter-drawer { --foreground: var(--reading-ink); --foreground-muted: var(--reading-muted); --foreground-faint: var(--reading-muted); color: var(--foreground); }
+  .main:not([data-page='styles']) h2 { font-weight: 750; }
+  .main:not([data-page='styles']) h3 { font-weight: 700; }
+
+  /* Intro cards: one quiet illustration field, no colour-coded families. */
+  .pop-card { border: 1px solid var(--border-soft); border-radius: 18px; }
+  .pop-card-art, .pop-card-1 .pop-card-art, .pop-card-2 .pop-card-art { background: #fcf4df; border-bottom: 1px solid var(--border-soft); height: 136px; }
+  .pop-card-art > span:first-child { color: var(--accent); top: 16px; left: 22px; }
+  .pop-card-art .glass-wrap { transform: none; }
+  .pop-card-art .glass-wrap svg { height: 112px; width: auto; }
+  .pop-spark { font-size: 28px; color: var(--accent); }
+  .pop-card h3 { font-size: 25px; }
+  .pop-card-body { padding: 24px; }
+  .pop-card .style-numbers { margin-top: 0; }
+  .pop-card:hover { transform: none; box-shadow: 0 4px 16px #4821320a; border-color: var(--border); }
+  .pop-card-actions a { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* Atlas and catalogue share the same reading surface and action states. */
+  .page-heading { border-top: 1px solid var(--border-soft); }
+  .atlas-toolbar { margin-bottom: 20px; }
+  .family-toolbar { margin-bottom: 24px; }
+  .family-tab { background: var(--surface-1); border: 1px solid var(--border-soft); color: var(--foreground-muted); }
+  .family-tab.on { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .family-tab:hover:not(.on) { border-color: var(--border); background: var(--surface-2); }
+  .style-entry { background: var(--surface-1); border: 1px solid var(--border-soft); border-radius: 14px; margin-bottom: 12px; padding: 22px 18px; gap: 16px; }
+  .style-entry.selected { background: var(--surface-1); border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+  .style-entry-heading h3 { font-size: 22px; font-weight: 750; line-height: 1.2; }
+  .style-description { font-size: 16px; }
+  .style-entry .style-numbers dd { font-size: 15px; font-weight: 600; }
+  .style-entry .style-numbers dt { font-size: 13px; }
+  .style-preview { border-color: var(--border-soft); padding: 28px; }
+  .style-preview h2 { color: var(--accent); }
+  .category-heading { color: var(--foreground-muted); padding-bottom: 14px; }
+  .category-heading > span, .style-code, .bjcp-code { font-variant-numeric: tabular-nums; }
+  .grid { gap: 18px; }
+  .bcard { border: 1px solid var(--border-soft); border-radius: 14px; background: var(--surface-1); }
+  .bcard-main { padding: 24px 20px; height: 100%; gap: 18px; border-radius: 14px; }
+  .bcard-main:hover { background: #fcf4df; }
+  .bcard:focus-within { border-color: var(--accent); }
+  .bcard-text h3 { font-size: 22px; font-weight: 750; line-height: 1.22; overflow-wrap: anywhere; }
+  .bcard-style { margin-top: 12px; font-size: 15px; }
+  .bcard-meta { border-top: 1px solid var(--border-soft); padding-top: 12px; margin-top: 16px; color: var(--foreground); font-weight: 600; font-size: 14px; }
+  .bcard-cat { margin-top: 8px; line-height: 1.45; }
+  .catalog-pagination { padding-top: 24px; }
+
+  /* Controls stay neutral until selected; pink marks a state, not a category. */
+  .mini, .compare-toggle, .chip, .select, .ms-trigger { min-height: 44px; border-radius: 10px; }
+  .mini, .compare-toggle { color: var(--accent); }
+  .compare-toggle.on, .chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .overview-actions .compare-toggle:not(.on), .big { background: var(--accent); color: var(--on-accent); }
+  .filter-drawer { background: var(--surface-1); border: 1px solid var(--border-soft); border-radius: 16px; padding: 24px; }
+  .filter-title { font-size: 16px; }
+  .active-filters { gap: 10px; }
+  .searchbox, .search-pop, .ms-panel { border-radius: 12px; }
+  .preview-choice { min-height: 44px; font-size: 14px; }
+  .note { background: #f2ede3; border: 1px solid var(--border-soft); border-radius: 10px; color: var(--reading-muted); max-width: none; }
+
+  /* Detail pages: plain reading columns, contained facts, generous rhythm. */
+  .detail { max-width: 1180px; }
+  .back { min-height: 44px; display: inline-flex; align-items: center; margin-bottom: 20px; }
+  .style-detail-top, .detail-head { background: var(--surface-1); border: 1px solid var(--border-soft); border-radius: 20px; padding: 32px; max-width: none; }
+  .style-detail-top { margin-bottom: 36px; }
+  .style-detail-top .style-numbers { gap: 24px 48px; border-block: 1px solid var(--border-soft); padding-block: 20px; }
+  .style-detail-top .overview-actions { margin-bottom: 0; }
+  .style-detail-top .style-numbers dd, .bigspec-value { color: var(--accent); }
+  .style-detail-top .source-caption { margin-top: 28px; }
+  .reading-layout { padding-top: 0; border-top: 0; gap: 52px; }
+  .reading-section { padding-top: 24px; margin-top: 24px; border-top: 1px solid var(--border-soft); }
+  .reading-section h3, .prose-grid h3 { font-size: 21px; color: var(--accent); }
+  .reference-aside { background: var(--surface-1); border: 1px solid var(--border-soft); border-radius: 16px; padding: 24px; align-self: start; }
+  .reference-list li { padding-block: 6px; border-bottom: 1px solid var(--border-soft); margin-bottom: 0; }
+  .spec-grid { background: var(--surface-1); border: 1px solid var(--border-soft); border-radius: 16px; padding: 24px; }
+  .bigspec-note { color: var(--foreground-muted); }
+  .prose p, .reading-section p { line-height: 1.75; }
+  .fact { background: #fcf4df; border: 1px solid var(--border-soft); }
+  .siblings { padding-top: 28px; border-top: 1px solid var(--border-soft); }
+  .siblings .chips { margin-top: 16px; }
+
+  /* Comparison keeps real SRM colours and independently identifiable series. */
+  .compare-picker { padding: 20px; background: var(--surface-1); border: 1px solid var(--border-soft); border-radius: 14px; }
+  .chart-card { border: 1px solid var(--border-soft); border-radius: 18px; padding: 28px; margin-top: 24px; background: var(--surface-1); }
+  .chart-card h2 { color: var(--accent); }
+  .compare-share { padding: 0 20px 12px; border: 1px solid var(--border-soft); border-radius: 14px; }
+  .compare-table thead th { background: #fcf4df; }
+  .compare-table tbody th { background: var(--surface-1); }
+  .compare-table tbody tr:nth-child(even) td { background: var(--paper); }
+  .empty { background: var(--surface-1); border: 1px solid var(--border-soft); border-radius: 18px; padding: 32px; margin-block: 32px; }
+  .footer { background: #fcf4df; border-top: 1px solid var(--border-soft); }
+
+  @media (max-width: 1000px) {
+    .style-preview { padding: 22px; }
+    .pop-card-body { padding: 20px; }
+  }
+  @media (max-width: 760px) {
+    .main:not([data-page='styles']) { padding-top: 28px; }
+    .style-entry { padding: 18px 14px; gap: 12px; }
+    .style-entry.selected { box-shadow: none; border-color: var(--border-soft); }
+    .style-entry-heading h3 { font-size: 21px; }
+    .style-detail-top, .detail-head { padding: 22px; border-radius: 16px; }
+    .style-overview-head { gap: 18px; }
+    .style-detail-top .style-numbers { gap: 20px; }
+    .reading-layout { gap: 28px; }
+    .chart-card { padding: 20px 14px; }
+    .filter-drawer { padding: 20px 16px; }
+  }
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+    .bcard-main { padding: 22px 18px; }
+    .style-numbers dd { font-size: 16px; }
+    .detail-head, .style-detail-top .style-overview-head { flex-direction: column; }
+    .style-detail-top .style-overview-head .glass-wrap { display: none; }
+    .compare-picker { padding: 16px; }
+    .compare-table th, .compare-table td { padding: 12px; }
+    .empty { padding: 24px; }
+    .spec-grid { padding: 20px; grid-template-columns: 1fr 1fr; gap: 22px 12px; }
+  }
+}
+@media (max-width: 700px) { .palette-workbench > summary { padding-inline: 16px; } .palette-workbench > summary span { display: block; margin-left: 0; margin-top: 4px; } }
